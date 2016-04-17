@@ -78,38 +78,22 @@ class PyTerrier():
     def get(self, route):
         """ Decorator for GET actions."""
 
-        def decorator(func):
-            self._register_route(route, 'GET', func)
-            return func
-
-        return decorator
+        return lambda func: self._register_route(route,'GET', func)
 
 
     def post(self, route):
         """ Decorator for POST actions"""
 
-        def decorator(func):
-            self._register_route(route, 'POST', func)
-            return func
-
-        return decorator
+        return lambda func: self._register_route(route,'POST', func)
 
 
     def put(self, route):
         """ Decorator for PUT actions"""
 
-        def decorator(func):
-            self._register_route(route, 'PUT', func)
-            return func
-
-        return decorator
+        return lambda func: self._register_route(route,'PUT', func)
 
 
     def delete(self, route):
         """ Decorator for DELETE actions"""
 
-        def decorator(func):
-            self._register_route(route, 'DELETE', func)
-            return func
-
-        return decorator
+        return lambda func: self._register_route(route,'DELETE', func)
