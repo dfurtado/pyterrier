@@ -1,5 +1,5 @@
+import os, sys
 from socketserver import TCPServer
-
 from .server import PyTerrierRequestHandler
 from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
 
@@ -10,7 +10,7 @@ class PyTerrier():
             self,
             hostname="localhost",
             port=8000,
-            template_dir="templates",
+            template_dir=os.path.join(os.path.dirname(sys.argv[0]), 'templates'),
             static_files="static",
             renderer=Jinja2TemplateRenderer):
         """
