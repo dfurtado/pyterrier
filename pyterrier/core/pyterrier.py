@@ -30,10 +30,10 @@ class PyTerrier():
         self.route_table = {}
 
 
-    def get_template(self, name):
+    def get_template(self, name, context = {}):
         """ Returns the rendered template """
 
-        return self._renderer.get_template(name)
+        return self._renderer.get_template(name, context)
 
 
     @property

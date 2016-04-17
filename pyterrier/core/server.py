@@ -38,3 +38,5 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
             self.send_header("Content-type:", "text/html")
             self.end_headers()
             self.wfile.write(bytes(results, "ascii"))
+
+
