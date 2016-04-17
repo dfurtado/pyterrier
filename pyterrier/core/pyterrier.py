@@ -31,22 +31,27 @@ class PyTerrier():
 
 
     def get_template(self, name):
-        print("template name {name}".format(name = name))
+        """ Returns the rendered template """
+
         return self._renderer.get_template(name)
 
 
     @property
     def template_dir(self):
+        """ Return the current template directory """
+
         return self._template_dir
 
 
     @property
     def static_files(self):
+        """ Returns the current static files directory """
+
         return self._static_files
 
 
     def print_config(self):
-        """Print the server configuration. """
+        """ Print the server configuration. """
 
         print("Server started at http://{host}:{port}".format(host=self._hostname, port=self._port))
         print("=> template_dir: {template_dir}".format(template_dir=self.template_dir))
@@ -54,7 +59,7 @@ class PyTerrier():
 
 
     def run(self):
-        """Start the server and listen on the specified port for new connections."""
+        """ Start the server and listen on the specified port for new connections."""
 
         _handler = lambda *args: PyTerrierRequestHandler(self.route_table, *args)
 
@@ -71,7 +76,7 @@ class PyTerrier():
 
 
     def get(self, route):
-        """Decorator for GET actions."""
+        """ Decorator for GET actions."""
 
         def decorator(func):
             self._register_route(route, 'GET', func)
@@ -81,7 +86,7 @@ class PyTerrier():
 
 
     def post(self, route):
-        """Decorator for POST actions"""
+        """ Decorator for POST actions"""
 
         def decorator(func):
             self._register_route(route, 'POST', func)
@@ -91,7 +96,7 @@ class PyTerrier():
 
 
     def put(self, route):
-        """Decorator for PUT actions"""
+        """ Decorator for PUT actions"""
 
         def decorator(func):
             self._register_route(route, 'PUT', func)
@@ -101,11 +106,10 @@ class PyTerrier():
 
 
     def delete(self, route):
-        """Decorator for DELETE actions"""
+        """ Decorator for DELETE actions"""
 
         def decorator(func):
             self._register_route(route, 'DELETE', func)
             return func
 
         return decorator
-
