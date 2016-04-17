@@ -6,6 +6,11 @@ app = PyTerrier(port=3000)
 def action():
     return app.get_template(name="index.html")
 
+@app.page_not_found()
+def handle_404():
+    return app.get_template(name="404.html")
+
+
 if __name__ == "__main__":
     app.run()
 

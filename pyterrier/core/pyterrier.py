@@ -69,31 +69,33 @@ class PyTerrier():
 
 
     def _register_route(self, route, verb, func):
-        """Register a new route, duplicate routes will be overwritten"""
+        """ Register a new route, duplicate routes will be overwritten"""
 
-        print("Registering : {r}".format(r = route))
         self.route_table.update({ route: (verb, func) })
+
+    def page_not_found(self, route = "/pagenotfound"):
+        return lambda func: self._register_route(route, 'GET', func)
 
 
     def get(self, route):
         """ Decorator for GET actions."""
 
-        return lambda func: self._register_route(route,'GET', func)
+        return lambda func: self._register_route(route, 'GET', func)
 
 
     def post(self, route):
         """ Decorator for POST actions"""
 
-        return lambda func: self._register_route(route,'POST', func)
+        return lambda func: self._register_route(route, 'POST', func)
 
 
     def put(self, route):
         """ Decorator for PUT actions"""
 
-        return lambda func: self._register_route(route,'PUT', func)
+        return lambda func: self._register_route(route, 'PUT', func)
 
 
     def delete(self, route):
         """ Decorator for DELETE actions"""
 
-        return lambda func: self._register_route(route,'DELETE', func)
+        return lambda func: self._register_route(route, 'DELETE', func)
