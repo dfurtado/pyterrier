@@ -1,7 +1,25 @@
-import os, sys
+import os, sys, re
 from socketserver import TCPServer
 from .server import PyTerrierRequestHandler
 from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
+
+class RouteConverter():
+
+    def __init__(self):
+
+        self.match_rules = {
+            "integer_params": (re.compile("\{\w+:int\}"), "(?P<typeid>[0-9]*)"),
+            "str_param": (re.compile("\{\w+:str\}"), "(?P<strvalue>\w+)"),
+         }
+
+
+    def convert(self, route):
+
+        for key in self.match_rules:
+            (m,n) = self.match_rules[key]
+            route = m.sub(n, route)
+
+        return route
 
 
 class PyTerrier():
@@ -28,6 +46,8 @@ class PyTerrier():
         self._renderer = renderer(self._template_dir)
 
         self.route_table = {}
+
+        self.route_converter = RouteConverter()
 
 
     def get_template(self, name, context = {}):
@@ -70,8 +90,9 @@ class PyTerrier():
 
     def _register_route(self, route, verb, func):
         """ Register a new route, duplicate routes will be overwritten"""
-
-        self.route_table.update({ route: (verb, func) })
+        r = self.route_converter.convert(route)
+        print(r)
+        self.route_table.update({ r: (verb, func) })
 
     def page_not_found(self, route = "/pagenotfound"):
         return lambda func: self._register_route(route, 'GET', func)
