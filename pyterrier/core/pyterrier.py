@@ -1,26 +1,9 @@
 import os, sys, re
 from socketserver import TCPServer
+
 from .server import PyTerrierRequestHandler
 from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
-
-class RouteConverter():
-
-    def __init__(self):
-
-        self.match_rules = {
-            "integer_params": (re.compile("\{\w+:int\}"), "(?P<typeid>[0-9]*)"),
-            "str_param": (re.compile("\{\w+:str\}"), "(?P<strvalue>\w+)"),
-         }
-
-
-    def convert(self, route):
-
-        for key in self.match_rules:
-            (m,n) = self.match_rules[key]
-            route = m.sub(n, route)
-
-        return route
-
+from .routeconverters import DefaultRouteConverter
 
 class PyTerrier():
 
@@ -30,7 +13,8 @@ class PyTerrier():
             port=8000,
             template_dir=os.path.join(os.path.dirname(sys.argv[0]), 'templates'),
             static_files="static",
-            renderer=Jinja2TemplateRenderer):
+            renderer=Jinja2TemplateRenderer,
+            route_converter=DefaultRouteConverter):
         """
         Create a new server.
         :param hostname: The hostname the server will be created.
@@ -47,7 +31,7 @@ class PyTerrier():
 
         self.route_table = {}
 
-        self.route_converter = RouteConverter()
+        self.route_converter = route_converter()
 
 
     def get_template(self, name, context = {}):
@@ -90,8 +74,8 @@ class PyTerrier():
 
     def _register_route(self, route, verb, func):
         """ Register a new route, duplicate routes will be overwritten"""
+        
         r = self.route_converter.convert(route)
-        print(r)
         self.route_table.update({ r: (verb, func) })
 
     def page_not_found(self, route = "/pagenotfound"):
