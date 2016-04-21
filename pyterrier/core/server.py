@@ -8,8 +8,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
        Create a new request handler.
        :param route_table: A dict with route information, the key is the route as string and
                            the value is a tuple containing the http verb and the action to be
-                           executed when the route is requested.
-       """
+                           executed when the route is requested.       """
 
        self._route_table = route_table
        BaseHTTPRequestHandler.__init__(self, *args)
