@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-
+from .resolver import RouteResolver
 
 class PyTerrierRequestHandler(BaseHTTPRequestHandler):
 
@@ -11,7 +11,10 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
                            executed when the route is requested.       """
 
        self._route_table = route_table
+       self._resolver = RouteResolver(route_table)
+
        BaseHTTPRequestHandler.__init__(self, *args)
+
 
     def do_GET(self):
         """
@@ -21,8 +24,8 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
         will be returned.
         """
         try:
-            (verb, handler) = self._route_table[self.path]
-            results =  handler()
+            (verb, handler, params) = self._resolver.resolve(self.path)
+            results = handler(params)
 
             self.send_response(200)
             self.send_header("Content-type:", "text/html")
