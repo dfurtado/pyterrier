@@ -21,6 +21,22 @@ class PyTerrier():
         :param port: Which port the server will listen for connections.
         :param template_dir: Folder where to find the site templates.
         :param static_files: Folder that will contain all static files, images, stylesheets, fonts.
+
+        Example:
+
+        from pyterrier.core import PyTerrier
+        from pyterrier.decorators import jsonresponse
+
+        app = Pyterrier()
+
+        @app.get('/users/{id:int}')
+        @jsonresponse
+        def get_user(id):
+            return user_repository.get(id)
+
+        if __name__ == '__main__':
+            app.run()
+
         """
         self._hostname = hostname
         self._port = port
@@ -80,6 +96,8 @@ class PyTerrier():
 
 
     def page_not_found(self, route = "/pagenotfound"):
+        """ Default page not found response """
+
         return lambda func: self._register_route(route, 'GET', func)
 
 
@@ -90,18 +108,18 @@ class PyTerrier():
 
 
     def post(self, route):
-        """ Decorator for POST actions"""
+        """ Decorator for POST actions """
 
         return lambda func: self._register_route(route, 'POST', func)
 
 
     def put(self, route):
-        """ Decorator for PUT actions"""
+        """ Decorator for PUT actions """
 
         return lambda func: self._register_route(route, 'PUT', func)
 
 
     def delete(self, route):
-        """ Decorator for DELETE actions"""
+        """ Decorator for DELETE actions """
 
         return lambda func: self._register_route(route, 'DELETE', func)
