@@ -74,9 +74,10 @@ class PyTerrier():
 
     def _register_route(self, route, verb, func):
         """ Register a new route, duplicate routes will be overwritten"""
-        
+
         r = self.route_converter.convert(route)
         self.route_table.update({ r: (verb, func) })
+
 
     def page_not_found(self, route = "/pagenotfound"):
         return lambda func: self._register_route(route, 'GET', func)

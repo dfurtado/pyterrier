@@ -25,7 +25,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
         """
         try:
             (verb, handler, params) = self._resolver.resolve(self.path)
-            results = handler(params)
+            results = handler(*params)
 
             self.send_response(200)
             self.send_header("Content-type:", "text/html")

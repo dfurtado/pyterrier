@@ -5,8 +5,8 @@ class DefaultRouteConverter():
     def __init__(self):
 
         self._rules = {
-            "integer_params": (re.compile("\{\w+:int\}"), "(?P<intvalue>[0-9]*)"),
-            "str_param":      (re.compile("\{\w+:str\}"), "(?P<strvalue>\w+)"),
+            "integer_params": (re.compile("\{\w+:int\}"), "([0-9]*)"),
+            "str_param":      (re.compile("\{\w+:str\}"), "(\w+)"),
          }
 
     def convert(self, route):
@@ -15,6 +15,6 @@ class DefaultRouteConverter():
             (m,n) = self._rules[key]
             route = m.sub(n, route)
 
-        return route
+        return "{route}{end}".format(route = route, end = "/{0,1}$")
 
 
