@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-#from http import HTTPStatus
+from http import HTTPStatus
 from .resolver import RouteResolver
 import os, re, mimetypes
 
@@ -25,7 +25,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
     def _fileResponse(self, path, match):
         with open(path, encoding = "ISO-8859-1") as f:
             results = f.read()
-            self.send_response(200)
+            self.send_response(HTTPStatus.OK)
             self.send_header("Content-type", mimetypes.types_map[match.group("ext")])
             self.end_headers()
             self.wfile.write(bytes(results, "ISO-8859-1"))
@@ -33,7 +33,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
     def _actionResponse(self, action_info):
         (verb, handler, params) = action_info
         results = handler(*params)
-        self.send_response(200)
+        self.send_response(HTTPStatus.OK)
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write(bytes(results, "ISO-8859-1"))
@@ -59,15 +59,15 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
                     if os.path.exists(path):
                         self._fileResponse(path, m)
                     else:
-                         self.send_response(404)
+                         self.send_response(HTTPStatus.NOT_FOUND)
                 else:
-                    self.send_response(404)
+                    self.send_response(HTTPStatus.NOT_FOUND)
 
         except KeyError as e:
             (verb, handler) = self._route_table["/pagenotfound"]
             results = handler()
 
-            self.send_response(404)
+            self.send_response(HTTPStatus.NOT_FOUND)
             self.send_header("Content-type", "text/html")
             self.end_headers()
             self.wfile.write(bytes(results, "ascii"))

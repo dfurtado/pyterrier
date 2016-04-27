@@ -12,6 +12,5 @@ class RouteResolver:
             values = re.match(m, path)
 
             if values != None:
-                print(values)
                 (verb, action) = self._route_table[route]
                 return (verb, action, values.groups())
