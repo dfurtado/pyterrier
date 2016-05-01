@@ -1,6 +1,7 @@
-# Pyterrier: The web framework for dog lovers! :dog: :dog: :dog:
+# PyTerrier: The web framework for dog lovers! :dog: :dog: :dog:
 
 Why do we need another framework you may ask? Well, why not? :goberserk:
+
 The python community is blessed with really nice and well designed web frameworks like Django, Flask, Turbo Gears, Pyramid
 and other. However, I've been in situations that Django was too overkill and Flask was too simplistic, I wanted something
 simple and scalable and that's why I went on the adventure to develop the Pyterrier.
@@ -12,6 +13,8 @@ miniature Schnauzer.
 
 ## Show me some code!!
 
+A very simple PyTerrier application would look a bit like this:
+
 ``` python
 from pyterrier.core import PyTerrier
 
@@ -21,8 +24,9 @@ app = PyTerrier(port=3000)
 def sayhello(name):
     return app.get_template("index.html", { name = name })
 ```
+
 This code is self-explanatory but anyways it will start a server running on the port 3000 and it will define a
-function that will be executed when a GET request to /sayhello/to/{name:str} is made. The `{name:str}` is the
+function that will be executed when a GET request to `/sayhello/to/{name:str}` is made. The `{name:str}` is the
 variable part this will be parsed and passed down to the sayhello function.
 
 The sayhello function will return a html using the template index.html and passing a *context* object to that
