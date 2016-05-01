@@ -34,7 +34,7 @@ template.
 
 Let's have a look how the template looks like.
 
-To avoid repeating html code everywhere we have a base HTML file.
+To avoid repeating HTML code everywhere we have a base file.
 
 ``` html
 <html>
@@ -47,7 +47,9 @@ To avoid repeating html code everywhere we have a base HTML file.
     </body>
 </html>
 ```
+
 Then we have the index.html
+
 
 ``` html
 {% extends "base.html" %}
@@ -57,7 +59,10 @@ Then we have the index.html
 {% endblock %}
 
 ```
+
 The default template engine that PyTerrier uses is Jinja2 and what that will do is when the index.html is requested
-Jinja2 sees that the index.html extends base.html so it will read base and replace the *block content* by the
-*block content* defined in the index.html bind the context and return it to the client.
+[Jinja2](https://github.com/pallets/jinja) sees that the index.html extends base.html so it will read base and replace
+the block content by the content defined in the block content in the index.html file which is `Hello, {{name}}`.
+The `{{name}} part will be replaced by the value passed in the URL. For example, a request to `sayhello/to/daniel` it
+will produce a page look like this:
 
