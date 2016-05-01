@@ -1,5 +1,3 @@
-[indexscreenshot]: screenshot.png "Index.html screenshot"
-
 # PyTerrier: The web framework for dog lovers! :dog: :dog: :dog:
 
 Why do we need another framework you may ask? Well, why not? :goberserk:
@@ -68,6 +66,7 @@ the block content by the content defined in the block content in the index.html 
 The `{{name}}` part will be replaced by the value passed in the URL. For example, a request to `sayhello/to/daniel` it
 will produce a page look like this:
 
-[! alt text][indexscreenshot]
+![HTML result](screenshot.png)
+
 
 
