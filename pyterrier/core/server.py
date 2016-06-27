@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
 from .resolver import RouteResolver
 import os, re, mimetypes
+import cgi
 
 class PyTerrierRequestHandler(BaseHTTPRequestHandler):
 
@@ -10,7 +11,8 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
        Create a new request handler.
        :param route_table: A dict with route information, the key is the route as string and
                            the value is a tuple containing the http verb and the action to be
-                           executed when the route is requested.       """
+                           executed when the route is requested.
+       """
 
        self._route_table = route_table
        self._resolver = RouteResolver(route_table)
@@ -30,13 +32,46 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(results, "ISO-8859-1"))
 
-    def _actionResponse(self, action_info):
-        (verb, handler, params) = action_info
-        results = handler(*params)
+    def ok_response(self, results, content_type="text/html"):
         self.send_response(HTTPStatus.OK)
-        self.send_header("Content-type", "text/html")
+        self.send_header("Content-type", content_type)
         self.end_headers()
         self.wfile.write(bytes(results, "ISO-8859-1"))
+
+    def _decodeResults(self, data):
+        return { x[0].decode('utf-8'):x[1][0].decode('utf-8') for x in data.items() }
+
+    def do_POST(self):
+
+        try:
+
+            action_info = self._resolver.resolve(self.path)
+
+            ctype, pdict = cgi.parse_header(self.headers.get_content_type())
+
+            if ctype == 'multipart/form-data':
+                postvars = cgi.parse_multipart(self.rfile, pdict)
+            elif ctype == 'application/x-www-form-urlencoded':
+                length = int(self.headers.get('Content-Length'))
+                postvars = cgi.parse_qs(self.rfile.read(length), keep_blank_values=1)
+            else:
+                postvars = {}
+
+            if(action_info != None):
+                verb, handler, params = action_info
+                decoded_str = self._decodeResults(postvars)
+                results = handler(decoded_str)
+                self.ok_response(results)
+
+        except KeyError as e:
+            (verb, handler) = self._route_table["/pagenotfound"]
+            results = handler()
+
+            self.send_response(HTTPStatus.NOT_FOUND)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            self.wfile.write(bytes(results, "ascii"))
+
 
     def do_GET(self):
         """
@@ -50,7 +85,9 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
             action_info = self._resolver.resolve(self.path)
 
             if action_info != None:
-              self._actionResponse(action_info)
+                (verb, handler, params) = action_info
+                results = handler(*params)
+                self.ok_response(results)
             else:
                 m = self._static_regex.search(self.path)
 
@@ -59,7 +96,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
                     if os.path.exists(path):
                         self._fileResponse(path, m)
                     else:
-                         self.send_response(HTTPStatus.NOT_FOUND)
+                        self.send_response(HTTPStatus.NOT_FOUND)
                 else:
                     self.send_response(HTTPStatus.NOT_FOUND)
 

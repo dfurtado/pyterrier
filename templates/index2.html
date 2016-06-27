@@ -2,6 +2,13 @@
 
 {% block content %}
 
-<h3>Hello, {{name}}</h3>
+
+<form method="POST" action="/user/save">
+    <input type="text" placeholder="firstname" name="firstname"/>
+    <input type="text" placeholder="lastname" name="lastname"/>
+    <input type="text" placeholder="email" name="email"/>
+    <input type="submit" value="Send"/>
+</form>
+
 
 {% endblock %}
