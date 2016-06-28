@@ -4,7 +4,7 @@ from socketserver import TCPServer
 from .httphandlers import PyTerrierRequestHandler
 from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
 from .routeconverters import DefaultRouteConverter
-
+from .threadedserver import ThreadedServer
 
 class PyTerrier():
     def __init__(
@@ -32,7 +32,22 @@ class PyTerrier():
         @app.get('/users/{id:int}')
         @jsonresponse
         def get_user(id):
-            return user_repository.get(id)
+            return user_datarepo.get(id)
+
+        @app.get('/')
+        def index():
+            return app.get_template(name = "index.html")
+
+        @app.post('/user/save')
+        def save_action(formdata):
+
+        _context = {
+            "field1": formdata['field1'],
+            "field2": formdata['field2'],
+            "field3": formdata['field3'],
+        }
+
+        return app.get_template(name="template.html", context = _context)
 
         if __name__ == '__main__':
             app.run()
@@ -82,7 +97,7 @@ class PyTerrier():
             *args)
 
         self.print_config()
-        self._server = TCPServer((self._hostname, self._port), _handler)
+        self._server = ThreadedServer((self._hostname, self._port), _handler)
         self._server.serve_forever()
 
     def _register_route(self, route, verb, func):
