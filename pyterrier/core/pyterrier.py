@@ -1,7 +1,7 @@
 import os, sys, re
 from socketserver import TCPServer
 
-from .server import PyTerrierRequestHandler
+from .httphandlers import PyTerrierRequestHandler
 from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
 from .routeconverters import DefaultRouteConverter
 
