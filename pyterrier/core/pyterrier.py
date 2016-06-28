@@ -53,6 +53,7 @@ class PyTerrier():
             app.run()
 
         """
+
         self._hostname = hostname
         self._port = port
         self._template_dir = template_dir

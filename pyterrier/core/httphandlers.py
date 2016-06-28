@@ -26,6 +26,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
 
     def _fileResponse(self, path, match):
         """ Read the contents of a requested file and send it to the client """
+
         with open(path, encoding = "ISO-8859-1") as f:
             results = f.read()
             self.send_response(HTTPStatus.OK)
@@ -35,6 +36,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
 
     def ok_response(self, results, content_type="text/html"):
         """ Send a 200 HTTP response back to the client """
+
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-type", content_type)
         self.end_headers()
@@ -42,6 +44,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
 
     def _decodeResults(self, data):
         """ Decode the binary strings to utf-8 """
+
         return { x[0].decode('utf-8'):x[1][0].decode('utf-8') for x in data.items() }
 
     def do_POST(self):
@@ -51,6 +54,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
             For file uploads need to create the uploaded file to a
             temporary location.
         """
+
         try:
 
             action_info = self._resolver.resolve(self.path)
@@ -88,6 +92,7 @@ class PyTerrierRequestHandler(BaseHTTPRequestHandler):
         If the action for the request is found it will be executed and the response
         will be returned.
         """
+
         try:
 
             action_info = self._resolver.resolve(self.path)
