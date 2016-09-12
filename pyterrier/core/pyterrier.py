@@ -36,7 +36,7 @@ class PyTerrier():
 
         @app.get('/')
         def index():
-            return app.get_template(name = "index.html")
+            return app.view_result(name = "index.html")
 
         @app.post('/user/save')
         def save_action(formdata):
@@ -47,7 +47,7 @@ class PyTerrier():
             "field3": formdata['field3'],
         }
 
-        return app.get_template(name="template.html", context = _context)
+        return app.view_result(name="template.html", context = _context)
 
         if __name__ == '__main__':
             app.run()
@@ -64,10 +64,16 @@ class PyTerrier():
 
         self.route_converter = route_converter()
 
-    def get_template(self, name, context={}):
+    def view_result(self, name, context={}):
         """ Returns the rendered template """
 
         return self._renderer.get_template(name, context)
+
+    def json_result(self, result={}):
+        """ Returns the result in json format """
+
+        pass
+
 
     @property
     def template_dir(self):

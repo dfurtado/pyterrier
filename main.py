@@ -4,7 +4,7 @@ app = PyTerrier(port=3000)
 
 @app.get("/")
 def action():
-    return app.get_template(name="index2.html")
+    return app.view_result(name="index2.html")
 
 
 @app.post('/user/save')
@@ -16,7 +16,7 @@ def save_action(formdata):
             "email": formdata['email'],
     }
 
-    return app.get_template(name="formresults.html", context = _context)
+    return app.view_result(name="formresults.html", context = _context)
 
 
 if __name__ == "__main__":
