@@ -22,7 +22,7 @@ app = PyTerrier(port=3000)
 
 @app.get("/sayhello/to/{name:str}")
 def sayhello(name):
-    return app.get_template("index.html", { name = name })
+    return app.view_result("index.html", { name = name })
 ```
 
 This code is self-explanatory but anyways it will start a server running on the port 3000 and it will define a
