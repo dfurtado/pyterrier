@@ -1,8 +1,21 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 
 
 {% block content %}
 
-    <h1> Start page</h1>
+<div>
+{% for user in users %}
 
+<p>
+  <span style="color:red;font-weight:bold;">{</span>
+  <span style="color:blue;font-weight:bold;">Name: </span>
+  <span>{{user.name}} , </span>
+  <span style="color:blue;font-weight:bold">Email:</span>
+  <span>{{user.email}}</span>
+  <span style="color:red;font-weight:bold;">}</span>
+</p>
+
+{% endfor%}
+</div>
+    
 {% endblock %}
