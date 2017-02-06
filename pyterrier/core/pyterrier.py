@@ -5,6 +5,7 @@ from .httphandlers import PyTerrierRequestHandler
 from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
 from .routeconverters import DefaultRouteConverter
 from .threadedserver import ThreadedServer
+from .serializers import DefaultJsonSerializer
 
 class PyTerrier():
     def __init__(
@@ -70,10 +71,10 @@ class PyTerrier():
 
         return self._renderer.get_template(name, context)
 
-    def json_result(self, result={}):
+    def json_result(self, data={}, json_serializer=DefaultJsonSerializer):
         """ Returns the result in json format """
-
-        pass
+        response = json_serializer.serialize(result)
+        return
 
 
     @property

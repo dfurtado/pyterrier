@@ -1,0 +1,1 @@
+from .default_serializer import DefaultJsonSerializer
