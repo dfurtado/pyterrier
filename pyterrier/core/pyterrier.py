@@ -1,11 +1,12 @@
 import os, sys, re
 from socketserver import TCPServer
 
-from .httphandlers import PyTerrierRequestHandler
-from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
+from serializers import DefaultJsonSerializer
+from renderers  import Jinja2TemplateRenderer
+
+from .http_handler  import HttpRequestHandler
 from .routeconverters import DefaultRouteConverter
 from .threadedserver import ThreadedServer
-from .serializers import DefaultJsonSerializer
 
 class PyTerrier():
     def __init__(
@@ -99,7 +100,7 @@ class PyTerrier():
     def run(self):
         """ Start the server and listen on the specified port for new connections."""
 
-        _handler = lambda *args: PyTerrierRequestHandler(
+        _handler = lambda *args: HttpRequestHandler(
             self.route_table,
             {'templates': self._template_dir, 'staticfiles': self._static_files,},
             *args)

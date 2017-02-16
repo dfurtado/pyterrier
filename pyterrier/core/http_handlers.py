@@ -1,10 +1,10 @@
 from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
-from .resolver import RouteResolver
-import os, re, mimetypes
-import cgi
+import os, re, mimetypes, cgi
 
-class PyTerrierRequestHandler(BaseHTTPRequestHandler):
+from core import RouteResolver
+
+class HttpRequestHandler(BaseHTTPRequestHandler):
 
     def __init__(self, route_table, config, *args):
        """
