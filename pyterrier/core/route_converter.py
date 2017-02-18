@@ -1,6 +1,6 @@
 import re
 
-class DefaultRouteConverter():
+class RouteConverter():
 
     def __init__(self):
 

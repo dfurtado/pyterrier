@@ -5,7 +5,7 @@ from .serializers import JsonSerializer
 from .renderers  import Jinja2TemplateRenderer
 
 from .core.http_handlers  import HttpRequestHandler
-from .core.route_converter import DefaultRouteConverter
+from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
 
@@ -16,8 +16,7 @@ class PyTerrier():
             port=8000,
             template_dir=os.path.join(os.path.dirname(sys.argv[0]), 'templates'),
             static_files=os.path.join(os.path.dirname(sys.argv[0]), 'static'),
-            renderer=Jinja2TemplateRenderer,
-            route_converter=DefaultRouteConverter):
+            renderer=Jinja2TemplateRenderer):
         """
         Create a new server.
         :param hostname: The hostname the server will be created.
@@ -66,7 +65,8 @@ class PyTerrier():
 
         self.route_table = {}
 
-        self.route_converter = route_converter()
+        self.route_converter = RouteConverter()
+
 
     def view_result(self, name, context={}):
         """
@@ -86,7 +86,7 @@ class PyTerrier():
     @property
     def template_dir(self):
         """
-        Return the current template directory
+        Return the current template directory.
         """
 
         return self._template_dir
@@ -94,19 +94,19 @@ class PyTerrier():
     @property
     def static_files(self):
         """
-        Returns the current static files directory
+        Returns the current static files directory.
         """
 
         return self._static_files
 
     def print_config(self):
         """
-        Print the server configuration.
+        Print the server information.
         """
 
-        print("Server started at http://{host}:{port}".format(host=self._hostname, port=self._port))
-        print("=> template_dir: {template_dir}".format(template_dir=self.template_dir))
-        print("=> static_dir: {static_files}".format(static_files=self.static_files))
+        print(f"Server started at http://{self._hostname}:{self._port}")
+        print(f"=> template_dir: {self._template_dir}")
+        print(f"=> static_dir: {self._static_files}")
 
     def run(self):
         """
@@ -123,8 +123,8 @@ class PyTerrier():
         self._server.serve_forever()
 
 
-    def init_routes(self):
-        self._route_discovery.register_actions()
+    def init_routes(self, prefix_routes=False):
+        self._route_discovery.register_actions(prefix_routes)
         for route in self._route_discovery.actions:
             self._register_route(*route)
 

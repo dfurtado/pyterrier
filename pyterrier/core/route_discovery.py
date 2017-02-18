@@ -20,7 +20,7 @@ class RouteDiscovery:
         return self._actions
 
 
-    def register_actions(self, prefix_route=False):
+    def register_actions(self, prefix_routes):
         """
         Import all the contents of the folder "controllers" and a list of
         tuples representing every route that will be available.
@@ -43,7 +43,7 @@ class RouteDiscovery:
             # Get only tuples (actions defined in the controllers)
             actions = [action for action in controller_functions if isinstance(action, tuple)]
 
-            if prefix_route:
+            if prefix_routes:
                 actions = self._prefix_routes(controller, actions)
 
             self._actions.extend(actions)
