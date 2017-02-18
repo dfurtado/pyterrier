@@ -1,7 +1,7 @@
 import os, sys, re
 from socketserver import TCPServer
 
-from .serializers import DefaultJsonSerializer
+from .serializers import JsonSerializer
 from .renderers  import Jinja2TemplateRenderer
 
 from .core.http_handlers  import HttpRequestHandler
@@ -72,7 +72,7 @@ class PyTerrier():
 
         return self._renderer.get_template(name, context)
 
-    def json_result(self, data={}, json_serializer=DefaultJsonSerializer):
+    def json_result(self, data={}, json_serializer=JsonSerializer):
         """ Returns the result in json format """
         response = json_serializer.serialize(result)
         return

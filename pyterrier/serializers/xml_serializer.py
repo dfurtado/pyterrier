@@ -1,5 +1,5 @@
 
-class DefaultJsonSerializer:
+class XmlSerializer:
 
     def __init__(self):
         pass
