@@ -1,12 +1,12 @@
 import os, sys, re
 from socketserver import TCPServer
 
-from serializers import DefaultJsonSerializer
-from renderers  import Jinja2TemplateRenderer
+from .serializers import DefaultJsonSerializer
+from .renderers  import Jinja2TemplateRenderer
 
-from .http_handler  import HttpRequestHandler
-from .routeconverters import DefaultRouteConverter
-from .threadedserver import ThreadedServer
+from .core.http_handlers  import HttpRequestHandler
+from .core.route_converter import DefaultRouteConverter
+from .core.threaded_server import ThreadedServer
 
 class PyTerrier():
     def __init__(

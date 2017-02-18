@@ -1,4 +1,4 @@
-from pyterrier.core import PyTerrier
+from pyterrier import PyTerrier
 from mocks import UserRepository
 app = PyTerrier(port=3000)
 

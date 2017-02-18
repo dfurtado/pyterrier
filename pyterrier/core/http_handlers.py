@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
 import os, re, mimetypes, cgi
 
-from core import RouteResolver
+from .route_resolver import RouteResolver
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
 
