@@ -7,6 +7,7 @@ from .renderers  import Jinja2TemplateRenderer
 from .core.http_handlers  import HttpRequestHandler
 from .core.route_converter import DefaultRouteConverter
 from .core.threaded_server import ThreadedServer
+from .core.route_discovery import RouteDiscovery
 
 class PyTerrier():
     def __init__(
@@ -60,7 +61,7 @@ class PyTerrier():
         self._port = port
         self._template_dir = template_dir
         self._static_files = static_files
-
+        self._route_discovery = RouteDiscovery()
         self._renderer = renderer(self._template_dir)
 
         self.route_table = {}
@@ -68,37 +69,49 @@ class PyTerrier():
         self.route_converter = route_converter()
 
     def view_result(self, name, context={}):
-        """ Returns the rendered template """
+        """
+        Returns the rendered template
+        """
 
         return self._renderer.get_template(name, context)
 
     def json_result(self, data={}, json_serializer=JsonSerializer):
-        """ Returns the result in json format """
+        """
+        Returns the result in json format
+        """
         response = json_serializer.serialize(result)
         return
 
 
     @property
     def template_dir(self):
-        """ Return the current template directory """
+        """
+        Return the current template directory
+        """
 
         return self._template_dir
 
     @property
     def static_files(self):
-        """ Returns the current static files directory """
+        """
+        Returns the current static files directory
+        """
 
         return self._static_files
 
     def print_config(self):
-        """ Print the server configuration. """
+        """
+        Print the server configuration.
+        """
 
         print("Server started at http://{host}:{port}".format(host=self._hostname, port=self._port))
         print("=> template_dir: {template_dir}".format(template_dir=self.template_dir))
         print("=> static_dir: {static_files}".format(static_files=self.static_files))
 
     def run(self):
-        """ Start the server and listen on the specified port for new connections."""
+        """
+        Start the server and listen on the specified port for new connections.
+        """
 
         _handler = lambda *args: HttpRequestHandler(
             self.route_table,
@@ -109,33 +122,52 @@ class PyTerrier():
         self._server = ThreadedServer((self._hostname, self._port), _handler)
         self._server.serve_forever()
 
+
+    def init_routes(self):
+        self._route_discovery.register_actions()
+        for route in self._route_discovery.actions:
+            self._register_route(*route)
+
+
     def _register_route(self, route, verb, func):
-        """ Register a new route, duplicate routes will be overwritten"""
+        """
+        Register a new route, duplicate routes will be overwritten
+        """
 
         r = self.route_converter.convert(route)
         self.route_table.update({r: (verb, func)})
 
     def page_not_found(self, route="/pagenotfound"):
-        """ Default page not found response """
+        """
+        Default page not found response
+        """
 
         return lambda func: self._register_route(route, 'GET', func)
 
     def get(self, route):
-        """ Decorator for GET actions."""
+        """
+        Decorator for GET actions.
+        """
 
         return lambda func: self._register_route(route, 'GET', func)
 
     def post(self, route):
-        """ Decorator for POST actions """
+        """
+        Decorator for POST actions
+        """
 
         return lambda func: self._register_route(route, 'POST', func)
 
     def put(self, route):
-        """ Decorator for PUT actions """
+        """
+        Decorator for PUT actions
+        """
 
         return lambda func: self._register_route(route, 'PUT', func)
 
     def delete(self, route):
-        """ Decorator for DELETE actions """
+        """
+        Decorator for DELETE actions
+        """
 
         return lambda func: self._register_route(route, 'DELETE', func)
