@@ -1,3 +1,6 @@
+"""
+Contains all decorators to register new routes.
+"""
 
 def get(route):
     """
@@ -29,14 +32,29 @@ def get(route):
     The format for the placeholders are {name:type} where type can be: str or int.
 
     """
+
     return lambda func: (route, 'GET', func)
 
+
 def post(route):
+    """
+    Decorator to configure the function as a HTTP POST request.
+    """
+
     return lambda func: (route, 'POST', func)
 
+
 def put(route):
+    """
+    Decorator to configure the function as a HTTP PUT request.
+    """
+
     return lambda func: (route, 'PUT', func)
 
-def delete(route):
-    return lambda func: (route, 'DELETE', func)
 
+def delete(route):
+    """
+    Decorator to configure the function as a HTTP DELETE request.
+    """
+
+    return lambda func: (route, 'DELETE', func)
