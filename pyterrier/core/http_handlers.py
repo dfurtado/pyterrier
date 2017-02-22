@@ -2,11 +2,13 @@ from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
 import os, re, mimetypes, cgi
 
+from pyterrier.http import HtmlResult
+
 from .route_resolver import RouteResolver
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
 
-    def __init__(self, route_table, config, *args):
+    def __init__(self, route_table, config, renderer, *args):
        """
        Create a new request handler.
        :param route_table: A dict with route information, the key is the route as string and
@@ -17,6 +19,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
        self._route_table = route_table
        self._resolver = RouteResolver(route_table)
        self._config = config
+       self._renderer = renderer
 
        self._static_regex = re.compile("/\w+(?P<ext>.\w{3,4})$", re.IGNORECASE | re.DOTALL)
 
@@ -100,6 +103,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             if action_info != None:
                 (verb, handler, params) = action_info
                 results = handler(*params)
+
+                if isinstance(results, HtmlResult):
+                    content = (results.template, results.context)
+                    results = self._renderer.render(*content)
+
                 self.ok_response(results)
             else:
                 m = self._static_regex.search(self.path)
@@ -121,5 +129,3 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             self.send_header("Content-type", "text/html")
             self.end_headers()
             self.wfile.write(bytes(results, "ascii"))
-
-

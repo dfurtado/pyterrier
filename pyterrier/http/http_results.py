@@ -3,20 +3,17 @@ Different helpers to return data to to client, responses can be
 HTML, XML or JSON.
 """
 
-def html_result():
-    """
-    Returns a compiled template, using the current template engine.
-    """
-    pass
+class HtmlResult():
+    def __init__(self, template, context):
+        self._template = template
+        self._context = context
 
-def json_result():
-    """
-    Returns a JSON result using the current JSON serializer.
-    """
-    pass
 
-def xml_result():
-    """
-    Returns a XML result.
-    """
-    pass
+    @property
+    def template(self):
+        return self._template
+
+
+    @property
+    def context(self):
+        return self._context

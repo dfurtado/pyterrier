@@ -10,8 +10,8 @@ class Jinja2TemplateRenderer:
         self._env = Environment(loader = self._loader, extensions = extensions)
 
 
-    def get_template(self, name, context):
+    def render(self, template_name, context):
         """ Get and return the rendered template """
 
-        template = self._env.get_template(name)
+        template = self._env.get_template(template_name)
         return template.render(context)

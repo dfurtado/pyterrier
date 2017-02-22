@@ -8,6 +8,7 @@ from .core.http_handlers  import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
+from .http.http_results import HtmlResult
 
 class PyTerrier():
     def __init__(
@@ -121,7 +122,8 @@ class PyTerrier():
             "staticfiles": self._static_files
         }
 
-        handler = lambda *args: HttpRequestHandler(self._route_table, options, *args)
+        handler = lambda *args: HttpRequestHandler(
+                self._route_table, options, self._renderer,*args)
 
         self._print_config()
         self._server = ThreadedServer((self._hostname, self._port), handler)
