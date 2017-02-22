@@ -1,9 +1,9 @@
-"""
-Different helpers to return data to to client, responses can be
-HTML, XML or JSON.
-"""
 
 class HtmlResult():
+    """
+    Class representing a action response.
+    """
+
     def __init__(self, template, context):
         self._template = template
         self._context = context

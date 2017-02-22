@@ -1,14 +1,16 @@
 import os, sys, re
 from socketserver import TCPServer
 
-from .serializers import JsonSerializer
-from .renderers  import Jinja2TemplateRenderer
-
 from .core.http_handlers  import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
+
 from .http.http_results import HtmlResult
+
+from .serializers import JsonSerializer
+from .renderers  import Jinja2TemplateRenderer
+
 
 class PyTerrier():
     def __init__(
@@ -60,22 +62,16 @@ class PyTerrier():
 
         self._hostname = hostname
         self._port = port
+
         self._template_dir = template_dir
         self._static_files = static_files
-        self._route_discovery = RouteDiscovery()
-        self._renderer = renderer(self._template_dir)
 
+        self._route_discovery = RouteDiscovery()
+        self.route_converter = RouteConverter()
         self._route_table = {}
 
-        self.route_converter = RouteConverter()
+        self._renderer = renderer(self._template_dir)
 
-
-    def view_result(self, name, context={}):
-        """
-        Returns the rendered template
-        """
-
-        return self._renderer.get_template(name, context)
 
     def json_result(self, data={}, json_serializer=JsonSerializer):
         """
@@ -85,22 +81,6 @@ class PyTerrier():
         response = json_serializer.serialize(result)
         return
 
-
-    @property
-    def template_dir(self):
-        """
-        Return the current template directory.
-        """
-
-        return self._template_dir
-
-    @property
-    def static_files(self):
-        """
-        Returns the current static files directory.
-        """
-
-        return self._static_files
 
     def _print_config(self):
         """
@@ -167,6 +147,7 @@ class PyTerrier():
         r = self.route_converter.convert(route)
         self._route_table.update({r: (verb, func)})
 
+
     def page_not_found(self, route="/pagenotfound"):
         """
         Default page not found response
@@ -175,12 +156,14 @@ class PyTerrier():
 
         return lambda func: self._register_route(route, 'GET', func)
 
+
     def get(self, route):
         """
         Decorator for GET actions.
         """
 
         return lambda func: self._register_route(route, 'GET', func)
+
 
     def post(self, route):
         """
@@ -189,12 +172,14 @@ class PyTerrier():
 
         return lambda func: self._register_route(route, 'POST', func)
 
+
     def put(self, route):
         """
         Decorator for PUT actions
         """
 
         return lambda func: self._register_route(route, 'PUT', func)
+
 
     def delete(self, route):
         """

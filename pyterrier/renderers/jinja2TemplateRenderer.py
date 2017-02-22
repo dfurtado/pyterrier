@@ -1,7 +1,9 @@
 from jinja2 import Environment, FileSystemLoader
 
 class Jinja2TemplateRenderer:
-
+    """
+    The framework's default renderer, which is a wrapper to Jinja2
+    """
 
     def __init__(self, template_dir, extensions = []):
         """ Create a new template renderer. By default pyterrier is using Jinja2"""

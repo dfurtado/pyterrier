@@ -7,6 +7,10 @@ from pyterrier.http import HtmlResult
 from .route_resolver import RouteResolver
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
+    """
+    Le framework's HTTP handler.
+    """
+
 
     def __init__(self, route_table, config, renderer, *args):
        """

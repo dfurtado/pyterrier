@@ -1,6 +1,11 @@
 import re
 
 class RouteConverter():
+    """
+    Helper class to convert the route URL into a regular expression that will
+    later be used by the RouteResolver to lookup the route table.
+    """
+
 
     def __init__(self):
 
@@ -10,6 +15,9 @@ class RouteConverter():
          }
 
     def convert(self, route):
+        """
+        Get a route value and convert it to a regular expression.
+        """
 
         for key in self._rules:
             (m,n) = self._rules[key]

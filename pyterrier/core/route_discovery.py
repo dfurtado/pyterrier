@@ -1,6 +1,10 @@
 import os, glob, re
 
 class RouteDiscovery:
+    """
+    Get all files in the default controllers folder, import all the files and register
+    it actions.
+    """
 
 
     def __init__(self):
