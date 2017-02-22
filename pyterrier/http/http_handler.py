@@ -2,9 +2,8 @@ from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
 import os, re, mimetypes, cgi
 
-from pyterrier.http import HtmlResult
-
-from .route_resolver import RouteResolver
+from .http_results import HtmlResult
+from pyterrier.core.route_resolver import RouteResolver
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
     """

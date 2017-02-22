@@ -1,7 +1,7 @@
 import os, sys, re
 from socketserver import TCPServer
 
-from .core.http_handlers  import HttpRequestHandler
+from .http.http_handler  import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
@@ -160,6 +160,9 @@ class PyTerrier():
     def get(self, route):
         """
         Decorator for GET actions.
+        This decorator has the same functionality as the decorator @get in pyterrier.http module, the main
+        difference is that this decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created.
         """
 
         return lambda func: self._register_route(route, 'GET', func)
@@ -168,6 +171,9 @@ class PyTerrier():
     def post(self, route):
         """
         Decorator for POST actions
+        This decorator has the same functionality as the @post decorator in pyterrier.http.post module, the main
+        difference is that this decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created.
         """
 
         return lambda func: self._register_route(route, 'POST', func)
@@ -175,7 +181,10 @@ class PyTerrier():
 
     def put(self, route):
         """
-        Decorator for PUT actions
+        Decorator for PUT actions.
+        This decorator has the same functionality as the @put decorator in pyterrier.http module, the main
+        difference is that this decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created.
         """
 
         return lambda func: self._register_route(route, 'PUT', func)
@@ -183,7 +192,10 @@ class PyTerrier():
 
     def delete(self, route):
         """
-        Decorator for DELETE actions
+        Decorator for DELETE actions.
+        This decorator has the same functionality as the @delete decorator in pyterrier.http module, the main
+        difference is that this decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created.
         """
 
         return lambda func: self._register_route(route, 'DELETE', func)
