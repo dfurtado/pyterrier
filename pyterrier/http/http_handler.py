@@ -30,6 +30,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
        mimetypes.init()
 
+
     def _fileResponse(self, path, match):
         """ Read the contents of a requested file and send it to the client """
 
@@ -40,6 +41,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(results, "ISO-8859-1"))
 
+
     def ok_response(self, results, content_type="text/html"):
         """ Send a 200 HTTP response back to the client """
 
@@ -48,10 +50,12 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(bytes(results, "ISO-8859-1"))
 
+
     def _decodeResults(self, data):
         """ Decode the binary strings to utf-8 """
 
         return { x[0].decode('utf-8'):x[1][0].decode('utf-8') for x in data.items() }
+
 
     def do_POST(self):
         """
