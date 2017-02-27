@@ -1,7 +1,10 @@
 
-class HtmlResult():
+class ViewResult:
     """
-    Class representing a action response.
+    Class represents a view result.
+    It wraps the template and the data context and later
+    uses it to compile a view using the default template
+    engine.
     """
 
     def __init__(self, template, context):

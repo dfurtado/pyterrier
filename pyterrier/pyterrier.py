@@ -6,8 +6,6 @@ from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
 
-from .http.http_results import HtmlResult
-
 from .serializers import JsonSerializer
 from .renderers  import Jinja2TemplateRenderer
 

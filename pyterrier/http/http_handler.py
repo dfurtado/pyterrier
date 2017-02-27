@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
 import os, re, mimetypes, cgi, json
 
-from .http_results import HtmlResult
+from .view_result import ViewResult
 from pyterrier.core.route_resolver import RouteResolver
 
 from pyterrier.encoders.default_json_encoder import DefaultJsonEncoder
@@ -115,7 +115,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
                 content_type = None
 
-                if isinstance(results, HtmlResult):
+                if isinstance(results, ViewResult):
                     content = (results.template, results.context)
                     results = self._renderer.render(*content)
                 else:
