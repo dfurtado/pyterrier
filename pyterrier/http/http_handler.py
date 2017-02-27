@@ -3,6 +3,8 @@ from http import HTTPStatus
 import os, re, mimetypes, cgi, json
 
 from .view_result import ViewResult
+from .http_result import HttpResult
+
 from pyterrier.core.route_resolver import RouteResolver
 
 from pyterrier.encoders.default_json_encoder import DefaultJsonEncoder
@@ -46,7 +48,6 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
     def ok_response(self, results, content_type="text/html"):
         """ Send a 200 HTTP response back to the client """
-
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-type", content_type)
         self.end_headers()
@@ -118,8 +119,8 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 if isinstance(results, ViewResult):
                     content = (results.template, results.context)
                     results = self._renderer.render(*content)
-                else:
-                    results = json.dumps(results, cls=DefaultJsonEncoder)
+                elif isinstance(results, HttpResult):
+                    results = json.dumps(results.data, cls=DefaultJsonEncoder)
                     content_type = "application/json"
 
                 self.ok_response(results, content_type)

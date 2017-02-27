@@ -28,30 +28,30 @@ class PyTerrier():
 
         Example:
 
-        from pyterrier.core import PyTerrier
-        from pyterrier.decorators import jsonresponse
+        from pyterrier import PyTerrier
+        from pyterrier.http import HttpResponse
+        from http import HTTPStatus
 
         app = Pyterrier()
 
         @app.get('/users/{id:int}')
-        @jsonresponse
         def get_user(id):
-            return user_datarepo.get(id)
+            user = user_datarepo.get(id)
+            return HttpResponse(user, HTTPStatus.OK)
 
         @app.get('/')
         def index():
-            return app.view_result(name = "index.html")
+            return ViewResult(name = "index.html")
 
         @app.post('/user/save')
         def save_action(formdata):
+            _context = {
+                "field1": formdata['field1'],
+                "field2": formdata['field2'],
+                "field3": formdata['field3'],
+            }
 
-        _context = {
-            "field1": formdata['field1'],
-            "field2": formdata['field2'],
-            "field3": formdata['field3'],
-        }
-
-        return app.view_result(name="template.html", context = _context)
+            return ViewResult(name="template.html", context = _context)
 
         if __name__ == '__main__':
             app.run()
@@ -69,15 +69,6 @@ class PyTerrier():
         self._route_table = {}
 
         self._renderer = renderer(self._template_dir)
-
-
-    def json_result(self, data={}, json_serializer=JsonSerializer):
-        """
-        Returns the result in json format
-        """
-
-        response = json_serializer.serialize(result)
-        return
 
 
     def _print_config(self):

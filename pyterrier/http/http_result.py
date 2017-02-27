@@ -10,7 +10,7 @@ class HttpResult:
 
     def __init__(self, data, http_status=HTTPStatus.OK):
         self._data = data
-        seld._http_status = http_status
+        self._http_status = http_status
 
 
     @property
