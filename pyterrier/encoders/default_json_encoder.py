@@ -36,7 +36,12 @@ class DefaultJsonEncoder(json.JSONEncoder):
 
         if isinstance(obj, self._builtin_types):
             return obj
+
+        """
         elif isinstance(obj, Serializable):
             return self.to_camelcase(obj)
         else:
             return self.__dict__
+        """
+
+        return self.to_camelcase(obj)
