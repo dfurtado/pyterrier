@@ -35,20 +35,10 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
        mimetypes.init()
 
 
-    def _fileResponse(self, path, match):
-        """ Read the contents of a requested file and send it to the client """
+    def prepare_response(self, results, http_status, content_type="text/html"):
+        """ Prepare response to be sent to the client """
 
-        with open(path, encoding = "ISO-8859-1") as f:
-            results = f.read()
-            self.send_response(HTTPStatus.OK)
-            self.send_header("Content-type", mimetypes.types_map[match.group("ext")])
-            self.end_headers()
-            self.wfile.write(bytes(results, "ISO-8859-1"))
-
-
-    def ok_response(self, results, content_type="text/html"):
-        """ Send a 200 HTTP response back to the client """
-        self.send_response(HTTPStatus.OK)
+        self.send_response(http_status)
         self.send_header("Content-type", content_type)
         self.end_headers()
         self.wfile.write(bytes(results, "ISO-8859-1"))
@@ -86,7 +76,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 verb, handler, params = action_info
                 decoded_str = self._decodeResults(postvars)
                 results = handler(decoded_str)
-                self.ok_response(results)
+                self.prepare_response(results)
 
         except KeyError as e:
             (verb, handler) = self._route_table["/pagenotfound"]
@@ -123,19 +113,10 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                     results = json.dumps(results.data, cls=DefaultJsonEncoder)
                     content_type = "application/json"
 
-                self.ok_response(results, content_type)
+                self.prepare_response(results, HTTPStatus.OK, content_type)
 
             else:
-                m = self._static_regex.search(self.path)
-
-                if m != None and m.group("ext") != None:
-                    path = os.path.normpath(self._config['staticfiles'] + self.path)
-                    if os.path.exists(path):
-                        self._fileResponse(path, m)
-                    else:
-                        self.send_response(HTTPStatus.NOT_FOUND)
-                else:
-                    self.send_response(HTTPStatus.NOT_FOUND)
+                self._serve_file(self.path)
 
         except KeyError as e:
             (verb, handler) = self._route_table["/pagenotfound"]
@@ -145,3 +126,30 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             self.send_header("Content-type", "text/html")
             self.end_headers()
             self.wfile.write(bytes(results, "ascii"))
+
+
+    def get_mime_type(self, path):
+        match = self._static_regex.search(path)
+
+        if  match != None and match.group("ext") != None:
+            return mimetypes.types_map[match.group("ext")]
+
+
+    def _serve_file(self, path):
+
+        path = os.path.normpath(self._config['staticfiles'] + self.path)
+
+        mime_type = self.get_mime_type(path)
+
+        if mime_type == None:
+            self.send_response(HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+
+        if not os.path.exists(path):
+            self.send_response(HTTPStatus.NOT_FOUND)
+
+        try:
+            with open(path, encoding = "ISO-8859-1") as f:
+                results = f.read()
+                self.prepare_response(results, HTTPStatus.OK, mime_type)
+        except:
+            self.send_response(HTTPStatus.INTERNAL_SERVER_ERROR)
