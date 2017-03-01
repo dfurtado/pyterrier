@@ -211,14 +211,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         mime_type = self.get_mime_type(path)
 
         if mime_type == None:
-            self.send_response(HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+            self.prepare_response("Unsupported media type.", HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
 
         if not os.path.exists(path):
-            self.send_response(HTTPStatus.NOT_FOUND)
-
-        try:
+            self.prepare_response("File not found.", HTTPStatus.NOT_FOUND)
+        else:
             with open(path, encoding = "ISO-8859-1") as f:
                 results = f.read()
                 self.prepare_response(results, HTTPStatus.OK, mime_type)
-        except:
-            self.send_response(HTTPStatus.INTERNAL_SERVER_ERROR)
