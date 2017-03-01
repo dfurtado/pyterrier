@@ -12,10 +12,9 @@ class HttpResult:
         self._data = data
         self._http_status = http_status
 
-
     @property
-    def status(self):
-        return self._status
+    def http_status(self):
+        return self._http_status
 
 
     @property

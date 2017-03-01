@@ -104,21 +104,21 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 (verb, handler, params) = action_info
                 results = handler(*params)
 
-                content_type = None
+                response = None
 
                 if isinstance(results, ViewResult):
-                    content = (results.template, results.context)
-                    results = self._renderer.render(*content)
-                elif isinstance(results, HttpResult):
-                    results = json.dumps(results.data, cls=DefaultJsonEncoder)
-                    content_type = "application/json"
+                    response = self._prepare_view_result(results)
 
-                self.prepare_response(results, HTTPStatus.OK, content_type)
+                elif isinstance(results, HttpResult):
+                    response = self._prepare_json_result(results)
+
+                self.prepare_response(*response)
 
             else:
                 self._serve_file(self.path)
 
         except KeyError as e:
+            """ TODO: change this exception it doesn't make any fucking sense. """
             (verb, handler) = self._route_table["/pagenotfound"]
             results = handler()
 
@@ -127,8 +127,71 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(results, "ascii"))
 
+    def _prepare_view_result(self, view_result):
+        """
+        Render the view result returning the rendered view using the default
+        template engine.
+
+        view_result: It is an instance of HttpResult that is the
+                     result of the requested action.
+        """
+
+        response = ()
+
+        try:
+            response = (
+                    self._renderer.render(view_result.template, view_result.context),
+                    HTTPStatus.OK,
+                    "text/html",
+                    )
+        except Exception as e:
+            """ TODO: It should return a default error page here rather than JSON """
+            response = (
+                    str(e),
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    "application/json",
+                    )
+
+        return response
+
+    def _prepare_json_result(self, json_result):
+        """
+        Parse the json result returning a prepare response to be sent
+        to the client.
+        The response will be a tuple containing: (HTTPStatus, data, content-type)
+
+        json_result: It is a instance of HttpResult that is result of the
+                     request action.
+        """
+
+        response = ()
+
+        try:
+            response = (
+                    json.dumps(json_result.data, cls=DefaultJsonEncoder),
+                    json_result.http_status,
+                    "application/json",
+                    )
+
+        except TypeError as e:
+            response = (
+                    str(e),
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    "application/json",
+                    )
+
+        return response
+
 
     def get_mime_type(self, path):
+        """
+        Retuns the mime type base on the extension of the file that the client is
+        requesting.
+
+        path: The relative path to the static file, it will by default search in the
+              static folder in the application root.
+        """
+
         match = self._static_regex.search(path)
 
         if  match != None and match.group("ext") != None:
@@ -136,6 +199,12 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
 
     def _serve_file(self, path):
+        """
+        Server a static file to the client.
+
+        path: The relative path to the static file, it will by default search in the
+              static folder in the application root.
+        """
 
         path = os.path.normpath(self._config['staticfiles'] + self.path)
 
