@@ -28,7 +28,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
        self._config = config
        self._renderer = renderer
 
-       self._static_regex = re.compile("/\w+(?P<ext>.\w{3,4})$", re.IGNORECASE | re.DOTALL)
+       self._static_regex = re.compile("[/\w\-\.\_]+(?P<ext>\.\w{,4})$", re.IGNORECASE | re.DOTALL)
 
        BaseHTTPRequestHandler.__init__(self, *args)
 
