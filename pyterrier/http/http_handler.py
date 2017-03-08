@@ -1,11 +1,14 @@
 from http.server import BaseHTTPRequestHandler
 from http import HTTPStatus
+from urllib.parse import urlparse, parse_qs
+
 import os, re, mimetypes, cgi, json
 
 from .view_result import ViewResult
 from .http_result import HttpResult
 
 from pyterrier.core.route_resolver import RouteResolver
+from pyterrier.core.request import Request
 
 from pyterrier.encoders.default_json_encoder import DefaultJsonEncoder
 
@@ -98,18 +101,20 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         try:
 
-            action_info = self._resolver.resolve(self.path)
+            request = Request(self)
+
+            action_info = self._resolver.resolve(request.path)
 
             if action_info != None:
                 (verb, handler, params) = action_info
+                handler.__self__.request = request
                 results = handler(*params)
 
                 response = None
 
                 if isinstance(results, ViewResult):
                     response = self._prepare_view_result(results)
-
-                elif isinstance(results, HttpResult):
+                else:
                     response = self._prepare_json_result(results)
 
                 self.prepare_response(*response)

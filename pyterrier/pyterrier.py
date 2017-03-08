@@ -131,9 +131,12 @@ class PyTerrier():
         """
         Register a new route, duplicate routes will be overwritten
         """
+        
+        func.__setattr__('request', None)
+        action = func.__get__(func, type(func))
 
         r = self.route_converter.convert(route)
-        self._route_table.update({r: (verb, func)})
+        self._route_table.update({r: (verb, action)})
 
 
     def page_not_found(self, route="/pagenotfound"):
