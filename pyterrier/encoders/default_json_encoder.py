@@ -2,7 +2,19 @@ import json, re
 
 
 class DefaultJsonEncoder(json.JSONEncoder):
+    """
+    The framework's default JSON encoder.
+
+    ..Note:: This can be changes at application start.
+    """
+
     def __init__(self, **kwargs):
+        """
+        Constructor
+
+        :Parameters:
+        - `kwargs`: see json.JSONEncoder in the python's standard library.
+        """
         super(DefaultJsonEncoder, self).__init__(**kwargs)
 
         self._builtin_types = (tuple, set, list, str, int, float, )
@@ -13,6 +25,13 @@ class DefaultJsonEncoder(json.JSONEncoder):
         self._to_lower = lambda key: key[0].lower() + key[1:] if key else key
 
     def to_camelcase(self, obj):
+        """
+        Helper to convert a python object to JSON and change the properties
+        to lowercase camel case format.
+
+        :Parameters:
+        - `obj`: the object to be converted to came case.
+        """
 
         camel_case_keys = []
 

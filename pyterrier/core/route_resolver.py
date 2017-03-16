@@ -9,17 +9,21 @@ class RouteResolver:
     def __init__(self, route_table):
         self._route_table = route_table
 
-    def resolve(self, path):
+    def resolve(self, uri):
         """
-        Search the route table by the request route.
-        If found it will return a tuple containing the HTTP verb, the action
+        Search the requested URI in the framework's route table.
+
+        :Parameters:
+        - `path`: the request URI
+
+        ..Note:: If found it will return a tuple containing the HTTP verb, the action
         to be executed and also a list of parameter values sent as part of the
         route URL.
         """
 
         for route in self._route_table:
             m = re.compile(route)
-            values = re.match(m, path)
+            values = re.match(m, uri)
 
             if values != None:
                 (verb, action) = self._route_table[route]

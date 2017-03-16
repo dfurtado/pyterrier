@@ -7,6 +7,16 @@ class ViewResult:
     """
 
     def __init__(self, template, context):
+        """
+        Constructor
+
+        :Parameters:
+        - `template`: the template that will be used to render the view.
+        - `context`: the object to be used as the view context.
+
+        ..Note:: the framework's default template engine is Jinja2, this can
+        be changed at the application start.
+        """
         self._template = template
         self._context = context
 

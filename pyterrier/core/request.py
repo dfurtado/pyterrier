@@ -2,6 +2,10 @@ from urllib.parse import urlparse, parse_qs
 
 
 class Request:
+    """
+    Class representing a HTTP request.
+    """
+
     def __init__(self, request):
         self._path = urlparse(request.path).path
         self._requestline = request.requestline

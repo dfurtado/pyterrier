@@ -3,8 +3,8 @@ import re
 
 class RouteConverter():
     """
-    Helper class to convert the route URL into a regular expression that will
-    later be used by the RouteResolver to lookup the route table.
+    Helper class to convert the route URI into a regular expression that will
+    later be used by the RouteResolver when searching the route table.
     """
 
     def __init__(self):
@@ -16,7 +16,10 @@ class RouteConverter():
 
     def convert(self, route):
         """
-        Get a route value and convert it to a regular expression.
+        Convert the action URI to a regular expression.
+
+        :Parameters:
+        - `route`: the action URI
         """
 
         for key in self._rules:

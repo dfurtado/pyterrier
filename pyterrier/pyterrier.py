@@ -19,13 +19,16 @@ class PyTerrier():
             renderer=Jinja2TemplateRenderer):
         """
         Create a new server.
-        :param hostname: The hostname the server will be created.
-        :param port: Which port the server will listen for connections.
-        :param template_dir: Folder where to find the site templates.
-        :param static_files: Folder that will contain all static files, images, stylesheets, fonts.
-        :param renderer: Specify the default template engine that will be used by the framework.
 
-        Example:
+        :Parameters:
+
+        - `hostname` (optional): The hostname the server will be created.
+        - `port` (optional): Which port the server will listen for connections.
+        - `template_dir` (optional): Folder where to find the site templates.
+        - `static_files` (optional): Folder that will contain all static files, images, stylesheets, fonts.
+        - `renderer` (optional): Specify the default template engine that will be used by the framework.
+
+        :Usage:
 
         from pyterrier import PyTerrier
         from pyterrier.http import HttpResponse
@@ -54,7 +57,6 @@ class PyTerrier():
 
         if __name__ == '__main__':
             app.run()
-
         """
 
         self._hostname = hostname
@@ -104,21 +106,21 @@ class PyTerrier():
         created in files in the controllers folder and register within the
         PyTerrier route table.
 
-        Usage:
-            app = PyTerrier()
-            app.init_routes()
+        :Parameters:
 
-        There's also an optional boolean parameter prefix_routes which tells PyTerrier
-        to prefix the route with the name of the controller, for instance, if there's a file
-        named userController in the controllers folder with the content bellow:
+        - `prefix_routes` (optional): Tell the framework to prefix the route with the
+        name of the controller.
 
-        @get("/getuser/{id:int}")
-        def get_users(id):
-            user = user_repository.get_user(id)
-            return json_result(user)
+        .. Notes:: `controllers` are defined in the controllers directory in the
+        application's root directory. For instance, if the application has a controller
+        named `userController.py` and for this controller there's a action defined with
+        the route /get/{id:int}, if `init_route` is called with the parameter `prefix_route`
+        set to `True`, the action will be registered as /user/get/{id:int}
 
-        If the prefix_routes is set to True the route will be created as
-        /user/getuser/{id:int}, if it is not set or False the route will be /getuser/{id:int}
+        :Usage:
+
+        app = PyTerrier()
+        app.init_routes()
         """
 
         self._route_discovery.register_actions(prefix_routes)
@@ -129,9 +131,17 @@ class PyTerrier():
 
     def _register_route(self, route, verb, func):
         """
-        Register a new route, duplicate routes will be overwritten
+        Register a new route.
+
+        :Parameters:
+        - `route`: the route definition
+        - `verb`: the HTTP verb that the action will respond to.
+        - `func`: the function that will be invoked when the route is
+        accessed.
+
+        .. Note:: Duplicated routes will be overwritten.
         """
-        
+
         func.__setattr__('request', None)
         action = func.__get__(func, type(func))
 
@@ -151,7 +161,11 @@ class PyTerrier():
     def get(self, route):
         """
         Decorator for GET actions.
-        This decorator has the same functionality as the decorator @get in pyterrier.http module, the main
+
+        :Parameters:
+        - `route`: the URL where the decorated function (action) can be invoked.
+
+        .. Note:: This decorator has the same functionality as the decorator @get in pyterrier.http module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
         """
@@ -162,7 +176,11 @@ class PyTerrier():
     def post(self, route):
         """
         Decorator for POST actions
-        This decorator has the same functionality as the @post decorator in pyterrier.http.post module, the main
+
+        :Parameters:
+        - `route`: the URL where the decorated function (action) can be invoked.
+
+        .. Note:: This decorator has the same functionality as the @post decorator in pyterrier.http.post module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
         """
@@ -173,7 +191,11 @@ class PyTerrier():
     def put(self, route):
         """
         Decorator for PUT actions.
-        This decorator has the same functionality as the @put decorator in pyterrier.http module, the main
+
+        :Parameters:
+        - `route`: the URL where the decorated function (action) can be invoked.
+
+        .. Note:: This decorator has the same functionality as the @put decorator in pyterrier.http module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
         """
@@ -184,7 +206,11 @@ class PyTerrier():
     def delete(self, route):
         """
         Decorator for DELETE actions.
-        This decorator has the same functionality as the @delete decorator in pyterrier.http module, the main
+
+        :Parameters:
+        - `route`: the URL where the decorated function (action) can be invoked.
+
+        .. Note:: This decorator has the same functionality as the @delete decorator in pyterrier.http module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
         """

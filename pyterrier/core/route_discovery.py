@@ -26,10 +26,17 @@ class RouteDiscovery:
 
     def register_actions(self, prefix_routes):
         """
-        Import all the contents of the folder "controllers" and a list of
-        tuples representing every route that will be available.
-        The tuple contains the route, the HTTP verb and the function that will be
-        executed when a request is done to the route.
+        Register actions in the controller in the controller directory.
+
+        :Parameters:
+        - `prefix_routes`: Tell the framework to prefix the route with the
+        name of the controller.
+
+        .. Notes:: `controllers` are defined in the controllers directory in the
+        application's root directory. For instance, if the application has a controller
+        named `userController.py` and for this controller there's a action defined with
+        the route /get/{id:int}, if `init_route` is called with the parameter `prefix_route`
+        set to `True`, the action will be registered as /user/get/{id:int}
         """
 
         modules = self._import_modules()
@@ -55,7 +62,17 @@ class RouteDiscovery:
 
     def _prefix_routes(self, controller, actions):
         """
-        Append the name of the controller (without the sufix) to the route path.
+        Append the name of the controller (without the sufix 'Controller')
+        to the route path.
+
+        :Parameters:
+        - `controller`: the controller object
+        - `actions`: the actions that have been registered in the `controller`
+
+        .. Note:: `actions` is a tuple (route, verb, func) where:
+                  - `route`: the URI to the action
+                  - `verb`: which HTTP verb the action will respond to
+                  - `func`: the action function
         """
 
         prefixed = []
@@ -70,7 +87,7 @@ class RouteDiscovery:
 
     def _import_modules(self):
         """
-        Import all the content of the "controllers" folder and returns the
+        Import all the content of the "controllers" directory and returns the
         module object.
         """
 
@@ -81,7 +98,7 @@ class RouteDiscovery:
 
     def _get_controllers(self):
         """
-        Get a list of files in the "controllers" folder.
+        Get a list of files in the "controllers" directory.
         """
 
         ctrl_dir = os.path.join(os.curdir, "controllers", "*Controller.py")
