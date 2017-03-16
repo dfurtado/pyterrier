@@ -1,4 +1,3 @@
-
 class ViewResult:
     """
     Class represents a view result.
@@ -11,11 +10,9 @@ class ViewResult:
         self._template = template
         self._context = context
 
-
     @property
     def template(self):
         return self._template
-
 
     @property
     def context(self):

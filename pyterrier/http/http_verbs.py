@@ -2,6 +2,7 @@
 Contains all decorators to register new routes.
 """
 
+
 def get(route):
     """
     Decorator to configure the function as a HTTP GET request

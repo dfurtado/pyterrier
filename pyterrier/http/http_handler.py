@@ -38,7 +38,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
        mimetypes.init()
 
 
-    def prepare_response(self, results, http_status, content_type="text/html"):
+    def _send_response(self, results, http_status, content_type="text/html"):
         """ Prepare response to be sent to the client """
 
         self.send_response(http_status)
@@ -47,10 +47,18 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(results, "ISO-8859-1"))
 
 
-    def _decodeResults(self, data):
+    def _decode_results(self, data):
         """ Decode the binary strings to utf-8 """
 
         return { x[0].decode('utf-8'):x[1][0].decode('utf-8') for x in data.items() }
+
+
+    def do_DELETE(self):
+        self.do_POST()
+
+
+    def do_PUT(self):
+        self.do_POST()
 
 
     def do_POST(self):
@@ -77,18 +85,13 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
             if(action_info != None):
                 verb, handler, params = action_info
-                decoded_str = self._decodeResults(postvars)
+                decoded_str = self._decode_results(postvars)
                 results = handler(decoded_str)
-                self.prepare_response(results)
+                response = self._prepare_json_result(results)
+                self._send_response(*response)
 
         except KeyError as e:
-            (verb, handler) = self._route_table["/pagenotfound"]
-            results = handler()
-
-            self.send_response(HTTPStatus.NOT_FOUND)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(bytes(results, "ascii"))
+            self._send_response({}, HTTPStatus.NOT_FOUND)
 
 
     def do_GET(self):
@@ -117,28 +120,22 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = self._prepare_json_result(results)
 
-                self.prepare_response(*response)
+                self._send_response(*response)
 
             else:
                 self._serve_file(self.path)
 
         except KeyError as e:
-            """ TODO: change this exception it doesn't make any fucking sense. """
-            (verb, handler) = self._route_table["/pagenotfound"]
-            results = handler()
+            self._send_response({}, HTTPStatus.NOT_FOUND)
 
-            self.send_response(HTTPStatus.NOT_FOUND)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(bytes(results, "ascii"))
 
     def _prepare_view_result(self, view_result):
         """
         Render the view result returning the rendered view using the default
         template engine.
 
-        view_result: It is an instance of HttpResult that is the
-                     result of the requested action.
+        view_result: It is an instance of ViewResult. See ViewResult in pyterrier.http_handler
+                     for more details.
         """
 
         response = ()
@@ -165,8 +162,8 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         to the client.
         The response will be a tuple containing: (HTTPStatus, data, content-type)
 
-        json_result: It is a instance of HttpResult that is result of the
-                     request action.
+        json_result: It is a instance of HttpResult. See pyterrier.http.http_result
+                     for more details.
         """
 
         response = ()
@@ -193,7 +190,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         Retuns the mime type base on the extension of the file that the client is
         requesting.
 
-        path: The relative path to the static file, it will by default search in the
+        path: The relative path to the static file. By default it will search in the
               static folder in the application root.
         """
 
@@ -207,7 +204,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         """
         Server a static file to the client.
 
-        path: The relative path to the static file, it will by default search in the
+        path: The relative path to the static file. By default it will search in the
               static folder in the application root.
         """
 
@@ -216,11 +213,15 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         mime_type = self.get_mime_type(path)
 
         if mime_type == None:
-            self.prepare_response("Unsupported media type.", HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+            self._send_response("Unsupported media type.", HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
 
         if not os.path.exists(path):
-            self.prepare_response("File not found.", HTTPStatus.NOT_FOUND)
+            self._send_response("File not found.", HTTPStatus.NOT_FOUND)
         else:
-            with open(path, encoding = "ISO-8859-1") as f:
-                results = f.read()
-                self.prepare_response(results, HTTPStatus.OK, mime_type)
+            try:
+                with open(path, encoding = "ISO-8859-1") as f:
+                    results = f.read()
+                    self._send_response(results, HTTPStatus.OK, mime_type)
+            except:
+                self._send_response(f"Internal Error ${sys.exc_info()[0]}", HTTPStatus.INTERNAL_SERVER_ERROR)
+                raise

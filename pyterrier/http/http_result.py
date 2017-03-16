@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+
 class HttpResult:
     """
     Represents the data to be returned to the client
@@ -15,7 +16,6 @@ class HttpResult:
     @property
     def http_status(self):
         return self._http_status
-
 
     @property
     def data(self):

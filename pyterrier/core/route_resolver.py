@@ -1,5 +1,6 @@
 import re
 
+
 class RouteResolver:
     """
     Lookup the request route in the route table.
@@ -7,7 +8,6 @@ class RouteResolver:
 
     def __init__(self, route_table):
         self._route_table = route_table
-
 
     def resolve(self, path):
         """
