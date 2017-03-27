@@ -14,6 +14,8 @@ class RouteConverter():
             "str_param": (re.compile("\{\w+:str\}"), "(\w+)"),
         }
 
+        self._trailing_regex = "\/{0,1}$"
+
     def convert(self, route):
         """
         Convert the action URI to a regular expression.
@@ -22,8 +24,11 @@ class RouteConverter():
         - `route`: the action URI
         """
 
+        if route == None or route.isspace() or route == "":
+            raise TypeError("Required argument 'route' cannot be null or empty")
+
         for key in self._rules:
             (m, n) = self._rules[key]
             route = m.sub(n, route)
 
-        return "{route}{end}".format(route=route, end="/{0,1}$")
+        return f"{route}{self._trailing_regex}"
