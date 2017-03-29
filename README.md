@@ -31,11 +31,11 @@ app
 
 | Item| Description |
 |:------|:-------------|
-|app (folder)| It's the root of the application, obviously it can be any name you like|
+|:file_folder: app| It's the root of the application, obviously it can be any name you like|
 |app.py| This is the application's entry point, there you can initialize the application and register routes|
-|controllers (folder)| The `controllers`folder will be the place to file file containing your actions, a bit more of that later|
-|static (folder)| The `static`folder is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
-|templates (folder)| This is the folder where Pyterrier will lookup for templates to rendered with the template engine of your choice|
+|:file_folder: controllers| The `controllers`folder will be the place to file file containing your actions, a bit more of that later|
+|:file_folder: static| The `static`folder is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
+|:file_folder: templates| This is the folder where Pyterrier will lookup for templates to rendered with the template engine of your choice|
 
 
 A very simple PyTerrier application would look a bit like this:
