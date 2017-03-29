@@ -2,7 +2,7 @@
 
 This project has started out of my curiosity to understand how web frameworks work under the hood, to study
 closely the http module and also the feel that the Python community need to have frameworks written in Python 3, so
-we can take advantage of all its neat features.
+we can take advantage of all its neat features. PyTerrier is highly inspired by frameworks like Flask, Django and Microsoft's Web API.
 
 ## Where the name come from?
 
