@@ -4,7 +4,7 @@ This project has started out of my curiosity to understand how web frameworks wo
 closely the http module and also the feel that the Python community need to have frameworks written in Python 3, so
 we can take advantage of all its neat features.
 
-## From where the name come from?
+## Where the name come from?
 
 I love dogs, all of them no matter what breed it is. This framework is a tribute to my dog Elsa who passed away in the Summer 2016.
 
