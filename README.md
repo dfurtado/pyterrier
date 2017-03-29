@@ -111,7 +111,7 @@ from http import HTTPStatus
 app = PyTerrier(port=3000)
 
 @app.get("/api/user/{id:int}")
-def sayhello(id):
+def get(id):
     user = user_repository.get(id)
 
     if user == None:
