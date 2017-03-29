@@ -1,9 +1,0 @@
-request object
-  request_line
-  server_version
-
-
-
-header 
-  params (dict)
-  content-type str
