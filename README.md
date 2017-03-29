@@ -1,4 +1,4 @@
-# PyTerrier: The web framework for dog lovers! :dog: :dog: :dog:
+# PyTerrier :dog:
 
 This project has started out of my curiosity to understand how web frameworks work under the hood, to study
 closely the http module and also the feel that the Python community need to have frameworks written in Python 3, so
@@ -6,7 +6,7 @@ we can take advantage of all its neat features.
 
 ## From where the name come from?
 
-I love dogs, all of them no matter what breed it is. This framework is a tribute to my dog Elsa.
+I love dogs, all of them no matter what breed it is. This framework is a tribute to my dog Elsa who passed away in the Summer 2016.
 
 ## Highlight features
 
@@ -21,11 +21,13 @@ I love dogs, all of them no matter what breed it is. This framework is a tribute
 PyTerrier favorite conventions over configurations, that mean the project have to follow a certain structure to
 work, for instance, a minimum bare bone PyTerrier application would have the following structure:
 
+```bash
 app
 ├── app.py
 ├── controllers
 ├── static
 └── templates
+```
 
 | Item| Description |
 |:------|:-------------|
@@ -118,7 +120,7 @@ def sayhello(id):
     return HttpResult(user)
 ```
 
-If HTTPStatus argument is not specified, HttpResult will return a HTTPStatus.OK by default.
+If `HTTPStatus` argument is not specified, `HttpResult` will return a `HTTPStatus.OK` by default.
 
 Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention
 PyTerrier looks for actions registered in files inside the `controllers` folder in the application root.
