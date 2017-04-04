@@ -1,4 +1,3 @@
-from nose import with_setup
 from nose.tools import raises
 from .route_converter import RouteConverter
 

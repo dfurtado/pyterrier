@@ -1,9 +1,7 @@
-"""
-Contains all decorators to register new routes.
-"""
+from typing import Callable
 
 
-def get(route):
+def get(route: str) -> Callable:
     """
     Decorator to configure the function as a HTTP GET request
 
@@ -17,7 +15,7 @@ def get(route):
 
     In the example above the @get decorator states that the function will
     respond to a HTTP GET request and the return of this function will be the
-    contents of a HTML template, in this case main.htmle
+    contents of a HTML template, in this case main.html
 
     The @get decorator also accepts variable parameters in the route URL. This
     can be achieved using placeholders. For example:
@@ -37,7 +35,7 @@ def get(route):
     return lambda func: (route, 'GET', func)
 
 
-def post(route):
+def post(route: str) -> Callable:
     """
     Decorator to configure the function as a HTTP POST request.
     """
@@ -45,7 +43,7 @@ def post(route):
     return lambda func: (route, 'POST', func)
 
 
-def put(route):
+def put(route: str) -> Callable:
     """
     Decorator to configure the function as a HTTP PUT request.
     """
@@ -53,7 +51,7 @@ def put(route):
     return lambda func: (route, 'PUT', func)
 
 
-def delete(route):
+def delete(route: str) -> Callable:
     """
     Decorator to configure the function as a HTTP DELETE request.
     """

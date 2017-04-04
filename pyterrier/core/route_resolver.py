@@ -1,4 +1,5 @@
 import re
+from typing import Tuple, Callable, List, Dict, Any
 
 
 class RouteResolver:
@@ -6,10 +7,10 @@ class RouteResolver:
     Lookup the request route in the route table.
     """
 
-    def __init__(self, route_table):
+    def __init__(self, route_table: Dict[str, Tuple[str, Any]]) -> None:
         self._route_table = route_table
 
-    def resolve(self, uri):
+    def resolve(self, uri: str):
         """
         Search the requested URI in the framework's route table.
 

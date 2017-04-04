@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class ViewResult:
     """
     Class represents a view result.
@@ -6,7 +9,7 @@ class ViewResult:
     engine.
     """
 
-    def __init__(self, template, context):
+    def __init__(self, template: str, context: Any) -> None:
         """
         Constructor
 
@@ -21,9 +24,9 @@ class ViewResult:
         self._context = context
 
     @property
-    def template(self):
+    def template(self) -> str:
         return self._template
 
     @property
-    def context(self):
+    def context(self) -> Any:
         return self._context

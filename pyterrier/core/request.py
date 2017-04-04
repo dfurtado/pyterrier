@@ -1,5 +1,5 @@
 from urllib.parse import urlparse, parse_qs
-
+from typing import Iterator, Dict
 
 class Request:
     """
@@ -13,19 +13,19 @@ class Request:
         self._params = self._parse_params(request)
 
     @property
-    def params(self):
+    def params(self) -> Iterator[object]:
         return self._params
 
     @property
-    def path(self):
+    def path(self) -> str:
         return self._path
 
     @property
-    def requestline(self):
+    def requestline(self) -> str:
         return self._requestline
 
     @property
-    def headers(self):
+    def headers(self) -> Dict:
         return self._headers
 
     def _parse_params(self, request):

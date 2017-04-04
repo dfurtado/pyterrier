@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import Optional
 
 
 class HttpResult:
@@ -9,7 +10,7 @@ class HttpResult:
     to JSON using the default JSON serializer.
     """
 
-    def __init__(self, data, http_status=HTTPStatus.OK):
+    def __init__(self, data, http_status: Optional[int]=HTTPStatus.OK) -> None:
         self._data = data
         self._http_status = http_status
 

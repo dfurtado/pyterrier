@@ -1,4 +1,5 @@
 import json, re
+from typing import Any, Dict
 
 
 class DefaultJsonEncoder(json.JSONEncoder):
@@ -8,7 +9,7 @@ class DefaultJsonEncoder(json.JSONEncoder):
     ..Note:: This can be changes at application start.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         """
         Constructor
 
@@ -24,7 +25,7 @@ class DefaultJsonEncoder(json.JSONEncoder):
         self._remove_special_chars = lambda key: self._regexp.sub(" ", key)
         self._to_lower = lambda key: key[0].lower() + key[1:] if key else key
 
-    def to_camelcase(self, obj):
+    def to_camelcase(self, obj: Any) -> Dict:
         """
         Helper to convert a python object to JSON and change the properties
         to lowercase camel case format.
@@ -43,7 +44,7 @@ class DefaultJsonEncoder(json.JSONEncoder):
 
         return dict(zip(camel_case_keys, obj.__dict__.values()))
 
-    def default(self, obj):
+    def default(self, obj: Any):
 
         if isinstance(obj, self._builtin_types):
             return obj
