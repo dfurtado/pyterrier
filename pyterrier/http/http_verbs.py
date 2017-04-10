@@ -5,15 +5,16 @@ Contains all decorators to register new routes.
 
 def get(route):
     """
-    Decorator to configure the function as a HTTP GET request
+    States that a function will be executed when a GET request
+    is sent to the server.
 
-    Usages:
+    .. Usages::
 
     To create a simple route without any parameters:
 
     @get("/")
-    def main():
-        return html_result("main.html")
+    def main(self):
+        pass
 
     In the example above the @get decorator states that the function will
     respond to a HTTP GET request and the return of this function will be the
@@ -23,9 +24,8 @@ def get(route):
     can be achieved using placeholders. For example:
 
     @get("/user/{id:int}")
-    def get_user(id):
-        user = user_repository.get(id)
-        return json_result(user)
+    def get(self, id):
+        pass
 
     In this case when the client send a HTTP GET request to /users/1, the function
     get_user will be executed and the id integer parameter will be passed to it.
@@ -39,7 +39,8 @@ def get(route):
 
 def post(route):
     """
-    Decorator to configure the function as a HTTP POST request.
+    States that a function will be executed when a POST request
+    is sent to the server.
     """
 
     return lambda func: (route, 'POST', func)
@@ -47,7 +48,8 @@ def post(route):
 
 def put(route):
     """
-    Decorator to configure the function as a HTTP PUT request.
+    States that a function will be executed when a PUT request
+    is sent to the server.
     """
 
     return lambda func: (route, 'PUT', func)
@@ -55,7 +57,8 @@ def put(route):
 
 def delete(route):
     """
-    Decorator to configure the function as a HTTP DELETE request.
+    States that a function will be executed when a DELETE request
+    is sent to the server.
     """
 
     return lambda func: (route, 'DELETE', func)

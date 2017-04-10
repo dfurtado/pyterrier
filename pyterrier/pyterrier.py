@@ -1,5 +1,8 @@
-import os, sys, re
+import sys
+import re
+
 from socketserver import TCPServer
+from os.path import join, dirname
 
 from .http.http_handler  import HttpRequestHandler
 from .core.route_converter import RouteConverter
@@ -14,11 +17,11 @@ class PyTerrier():
             self,
             hostname="localhost",
             port=8000,
-            template_dir=os.path.join(os.path.dirname(sys.argv[0]), 'templates'),
-            static_files=os.path.join(os.path.dirname(sys.argv[0]), 'static'),
+            template_dir=join(dirname(sys.argv[0]), 'templates'),
+            static_files=join(dirname(sys.argv[0]), 'static'),
             renderer=Jinja2TemplateRenderer):
         """
-        Create a new server.
+        Create a new PyTerrier application
 
         :Parameters:
 
@@ -27,36 +30,6 @@ class PyTerrier():
         - `template_dir` (optional): Folder where to find the site templates.
         - `static_files` (optional): Folder that will contain all static files, images, stylesheets, fonts.
         - `renderer` (optional): Specify the default template engine that will be used by the framework.
-
-        :Usage:
-
-        from pyterrier import PyTerrier
-        from pyterrier.http import HttpResponse
-        from http import HTTPStatus
-
-        app = Pyterrier()
-
-        @app.get('/users/{id:int}')
-        def get_user(id):
-            user = user_datarepo.get(id)
-            return HttpResponse(user, HTTPStatus.OK)
-
-        @app.get('/')
-        def index():
-            return ViewResult(name = "index.html")
-
-        @app.post('/user/save')
-        def save_action(formdata):
-            _context = {
-                "field1": formdata['field1'],
-                "field2": formdata['field2'],
-                "field3": formdata['field3'],
-            }
-
-            return ViewResult(name="template.html", context = _context)
-
-        if __name__ == '__main__':
-            app.run()
         """
 
         self._hostname = hostname
@@ -148,16 +121,6 @@ class PyTerrier():
         r = self.route_converter.convert(route)
         self._route_table.update({r: (verb, action)})
 
-
-    def page_not_found(self, route="/pagenotfound"):
-        """
-        Default page not found response
-        :param route - Specify the route where the 404 view will be placed, default is /pagenotfound
-        """
-
-        return lambda func: self._register_route(route, 'GET', func)
-
-
     def get(self, route):
         """
         Decorator for GET actions.
@@ -168,10 +131,15 @@ class PyTerrier():
         .. Note:: This decorator has the same functionality as the decorator @get in pyterrier.http module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
+        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.get instead.
+
+        .. Usage::
+        @app.get("/api/get")
+        def get(self):
+            pass
         """
 
         return lambda func: self._register_route(route, 'GET', func)
-
 
     def post(self, route):
         """
@@ -183,10 +151,15 @@ class PyTerrier():
         .. Note:: This decorator has the same functionality as the @post decorator in pyterrier.http.post module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
+        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.post instead.
+
+        .. Usage::
+        @app.post("/api/add")
+        def post(self):
+            pass
         """
 
         return lambda func: self._register_route(route, 'POST', func)
-
 
     def put(self, route):
         """
@@ -198,10 +171,15 @@ class PyTerrier():
         .. Note:: This decorator has the same functionality as the @put decorator in pyterrier.http module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
+        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.put instead.
+
+        .. Usage::
+        @app.put("/api/add")
+        def put(self):
+            pass
         """
 
         return lambda func: self._register_route(route, 'PUT', func)
-
 
     def delete(self, route):
         """
@@ -213,6 +191,12 @@ class PyTerrier():
         .. Note:: This decorator has the same functionality as the @delete decorator in pyterrier.http module, the main
         difference is that this decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
+        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.delete instead.
+
+        .. Usage::
+        @app.delete("/api/delete")
+        def delete(self):
+            pass
         """
 
         return lambda func: self._register_route(route, 'DELETE', func)
