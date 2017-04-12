@@ -16,7 +16,7 @@ class RouteConverter():
 
         self._trailing_regex = "\/{0,1}$"
 
-    def convert(self, route):
+    def convert(self, route: str) -> str:
         """
         Convert the action URI to a regular expression.
 

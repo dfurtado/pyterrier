@@ -1,4 +1,5 @@
-import os, glob, re
+import os, glob, re, sys
+
 
 class RouteDiscovery:
     """
@@ -9,7 +10,7 @@ class RouteDiscovery:
 
     def __init__(self):
         self._actions = []
-        self.llers = []
+        self.controllers = []
         self._controller_folder = "controllers"
         self._recontroller = re.compile(r"[\w\-]+(Controller)$")
 
@@ -101,6 +102,5 @@ class RouteDiscovery:
         Get a list of files in the "controllers" directory.
         """
 
-        ctrl_dir = os.path.join(os.curdir, "controllers", "*Controller.py")
-        file_list = glob.glob(ctrl_dir)
-        return [x.replace(".py", "").split("/")[2] for x in file_list]
+        return [filename.replace(".py","") for filename in os.listdir("controllers")
+                if filename.endswith('Controller.py')]

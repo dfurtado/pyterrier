@@ -3,23 +3,23 @@ import re
 
 from socketserver import TCPServer
 from os.path import join, dirname
+from typing import List, Tuple, Any, Optional, Dict, Callable
 
 from .http.http_handler  import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
-
-from .renderers  import Jinja2TemplateRenderer
+from .renderers.jinja2TemplateRenderer  import Jinja2TemplateRenderer
 
 
 class PyTerrier():
     def __init__(
             self,
-            hostname="localhost",
-            port=8000,
-            template_dir=join(dirname(sys.argv[0]), 'templates'),
-            static_files=join(dirname(sys.argv[0]), 'static'),
-            renderer=Jinja2TemplateRenderer):
+            hostname: Optional[str]="localhost",
+            port: Optional[int]=8000,
+            template_dir: Optional[str]=join(dirname(sys.argv[0]), 'templates'),
+            static_files: Optional[str]=join(dirname(sys.argv[0]), 'static'),
+            renderer: Optional[Any]=Jinja2TemplateRenderer) -> None:
         """
         Create a new PyTerrier application
 
@@ -40,7 +40,7 @@ class PyTerrier():
 
         self._route_discovery = RouteDiscovery()
         self.route_converter = RouteConverter()
-        self._route_table = {}
+        self._route_table: Dict[str, Tuple[str, Any]] = {}
 
         self._renderer = renderer(self._template_dir)
 
@@ -102,7 +102,7 @@ class PyTerrier():
             self._register_route(*route)
 
 
-    def _register_route(self, route, verb, func):
+    def _register_route(self, route: str, verb: str, func):
         """
         Register a new route.
 
@@ -114,7 +114,6 @@ class PyTerrier():
 
         .. Note:: Duplicated routes will be overwritten.
         """
-
         func.__setattr__('request', None)
         action = func.__get__(func, type(func))
 
