@@ -9,7 +9,7 @@ class ViewResult:
     engine.
     """
 
-    def __init__(self, template: str, context: Any) -> None:
+    def __init__(self, template: str, context: Any = {}) -> None:
         """
         Constructor
 
