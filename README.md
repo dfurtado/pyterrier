@@ -47,7 +47,7 @@ from pyterrier.http import ViewResult
 app = PyTerrier(port=3000)
 
 @app.get("/sayhello")
-def sayhello():
+def sayhello(self):
     return ViewResult("index.html", { "message": "Hellooooo!" })
 ```
 
@@ -83,6 +83,9 @@ Then we have content html called `index.html`
 {% endblock %}
 
 ```
+One thing to notice here is that every function in `PyTerrier` have a first argument that is `self`. Self is a reference to the
+function itself and expose a property called `request` which is (as the name says) information about the request that has been
+performed. The `Request` object exposes the request path, the parameters and header values.
 
 Now let's say we want to pass a parameter in the URL, you achieve that using a parameter placeholder:
 
@@ -93,7 +96,7 @@ from pyterrier.http import ViewResult
 app = PyTerrier(port=3000)
 
 @app.get("/sayhello/to/{name:str}")
-def sayhello(name):
+def sayhello(self, name):
     return ViewResult("index.html", { "message": f"Hellooooo, {name}!" })
 ```
 When a GET request is made to `/sayhello/to/daniel`, the HTML content containg the message
@@ -111,7 +114,7 @@ from http import HTTPStatus
 app = PyTerrier(port=3000)
 
 @app.get("/api/user/{id:int}")
-def get(id):
+def get(self, id):
     user = user_repository.get(id)
 
     if user == None:
@@ -133,7 +136,7 @@ from pyterrier.http import HttpResult, get
 from http import HTTPStatus
 
 @get("/get/{id:int}")
-def get(id):
+def get(self, id):
     user = user_repository.get(id)
 
     if user == None:
@@ -163,6 +166,38 @@ The code is very similar with what we had before but now we are calling the meth
 all the files in the `controllers` folder and register all the actions that it founds. Additionally, the argument `prefix_routes`
 is set to `True` meaning that it will prefix the route with the controller prefix. For instance, the route that we just registered
 in the `userController` file is `/get/{id:int}` with the `prefix_routes` set to `True` it will become `/user/get/{id:int}`.
+
+## Posting data to the server
+
+Performing a POST request is as simple as GET. It is only needed to import the `@post` decorator and
+get the request data out of `self.request.params`:
+
+```python
+from pyterrier.http import HttpResult, post
+from http import HTTPStatus
+
+@post("/save")
+def get(self):
+
+    id, name, email = self.request.params
+
+    """ Update the user """
+
+    return HttpResult({}, HTTPStatus.OK)
+
+```
+
+## Delete request
+
+```python
+from pyterrier.http import HttpResult, delete
+
+@delete("/user/{id:int}/delete")
+def delete(self, id):
+    deleted = user_repository.delete(id)
+    
+
+```
 
 ## Copyright and License
 
