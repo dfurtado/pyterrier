@@ -10,7 +10,7 @@ from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
 from .renderers.jinja2TemplateRenderer  import Jinja2TemplateRenderer
-
+from .renderers.baseTemplateRenderer import BaseTemplateRenderer
 
 class PyTerrier():
     def __init__(
@@ -19,7 +19,7 @@ class PyTerrier():
             port: Optional[int]=8000,
             template_dir: Optional[str]=join(dirname(sys.argv[0]), 'templates'),
             static_files: Optional[str]=join(dirname(sys.argv[0]), 'static'),
-            renderer: Optional[Any]=Jinja2TemplateRenderer) -> None:
+            renderer: Optional[BaseTemplateRenderer]=Jinja2TemplateRenderer) -> None:
         """
         Create a new PyTerrier application
 
@@ -31,6 +31,9 @@ class PyTerrier():
         - `static_files` (optional): Folder that will contain all static files, images, stylesheets, fonts.
         - `renderer` (optional): Specify the default template engine that will be used by the framework.
         """
+
+        if not issubclass(renderer, BaseTemplateRenderer):
+            raise TypeError("The parameter `renderer` needs to be a subclass of pyterrier.renderers.BaseTemplateRenderer")
 
         self._hostname = hostname
         self._port = port
