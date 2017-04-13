@@ -25,11 +25,11 @@ class PyTerrier():
 
         :Parameters:
 
-        - `hostname` (optional): The hostname the server will be created.
-        - `port` (optional): Which port the server will listen for connections.
-        - `template_dir` (optional): Folder where to find the site templates.
-        - `static_files` (optional): Folder that will contain all static files, images, stylesheets, fonts.
-        - `renderer` (optional): Specify the default template engine that will be used by the framework.
+        - `hostname`: The hostname the server will be created.
+        - `port`: Which port the server will listen for connections.
+        - `template_dir`: Folder where to find the site templates.
+        - `static_files`: Folder that will contain all static files, images, stylesheets, fonts.
+        - `renderer`: Specify the default template engine that will be used by the framework.
         """
 
         if not issubclass(renderer, BaseTemplateRenderer):
@@ -48,7 +48,7 @@ class PyTerrier():
         self._renderer = renderer(self._template_dir)
 
 
-    def _print_config(self):
+    def _print_config(self) -> None:
         """
         Print the server information.
         """
@@ -58,7 +58,7 @@ class PyTerrier():
         print(f"=> static_dir: {self._static_files}")
 
 
-    def run(self):
+    def run(self) -> None:
         """
         Start the server and listen on the specified port for new connections.
         """
@@ -76,7 +76,7 @@ class PyTerrier():
         self._server.serve_forever()
 
 
-    def init_routes(self, prefix_routes=False):
+    def init_routes(self, prefix_routes: bool=False) -> None:
         """
         The init_routes function will get all routes and actions that have been
         created in files in the controllers folder and register within the
@@ -123,7 +123,7 @@ class PyTerrier():
         r = self.route_converter.convert(route)
         self._route_table.update({r: (verb, action)})
 
-    def get(self, route):
+    def get(self, route: str):
         """
         Decorator for GET actions.
 
@@ -143,7 +143,7 @@ class PyTerrier():
 
         return lambda func: self._register_route(route, 'GET', func)
 
-    def post(self, route):
+    def post(self, route: str):
         """
         Decorator for POST actions
 
@@ -163,7 +163,7 @@ class PyTerrier():
 
         return lambda func: self._register_route(route, 'POST', func)
 
-    def put(self, route):
+    def put(self, route: str):
         """
         Decorator for PUT actions.
 
@@ -183,7 +183,7 @@ class PyTerrier():
 
         return lambda func: self._register_route(route, 'PUT', func)
 
-    def delete(self, route):
+    def delete(self, route: str):
         """
         Decorator for DELETE actions.
 
