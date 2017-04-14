@@ -4,10 +4,6 @@ This project has started out of my curiosity to understand how web frameworks wo
 closely the http module and also the feel that the Python community need to have frameworks written in Python 3, so
 we can take advantage of all its neat features. PyTerrier is highly inspired by frameworks like Flask, Django and Microsoft's Web API.
 
-## Where the name come from?
-
-I love dogs, all of them no matter what breed it is. This framework is a tribute to my dog Elsa who passed away in the Summer 2016.
-
 ## Highlight features
 
 - Written in Python 3.6
@@ -108,7 +104,7 @@ To return a JSON result we can use the class HttpResult:
 
 ``` python
 from pyterrier import PyTerrier
-from pyterrier.http import HttpResult
+from pyterrier.http import Ok, NotFound
 from http import HTTPStatus
 
 app = PyTerrier(port=3000)
@@ -118,9 +114,9 @@ def get(self, id):
     user = user_repository.get(id)
 
     if user == None:
-        return HttpResult({}, HTTPStatus.NOT_FOUND)
+        return NotFound()
 
-    return HttpResult(user)
+    return Ok(user)
 ```
 
 If `HTTPStatus` argument is not specified, `HttpResult` will return a `HTTPStatus.OK` by default.
@@ -132,7 +128,7 @@ called `userController.py` with the following contents:
 
 ``` python
 from pyterrier import PyTerrier
-from pyterrier.http import HttpResult, get
+from pyterrier.http import Ok, NotFound, get
 from http import HTTPStatus
 
 @get("/get/{id:int}")
@@ -140,9 +136,9 @@ def get(self, id):
     user = user_repository.get(id)
 
     if user == None:
-        return HttpResult({}, HTTPStatus.NOT_FOUND)
+        return NotFound()
 
-    return HttpResult(user)
+    return Ok(user)
 ```
 
 We also need to perform some changes in the application's main file, like so:
@@ -173,29 +169,43 @@ Performing a POST request is as simple as GET. It is only needed to import the `
 get the request data out of `self.request.params`:
 
 ```python
-from pyterrier.http import HttpResult, post
-from http import HTTPStatus
+from pyterrier.http import Ok, post
 
-@post("/save")
-def get(self):
+@post("/add")
+def add(self):
 
     id, name, email = self.request.params
 
     """ Update the user """
 
-    return HttpResult({}, HTTPStatus.OK)
+    return Ok()
+
+```
+
+## PUT request
+```python
+from pyterrier.http import Ok, put
+
+@put("/update")
+def update(self):
+
+    id, name, email = self.request.params
+
+    """ Update the user """
+
+    return Ok()
 
 ```
 
 ## Delete request
 
 ```python
-from pyterrier.http import HttpResult, delete
+from pyterrier.http import Ok, delete
 
 @delete("/user/{id:int}/delete")
 def delete(self, id):
     deleted = user_repository.delete(id)
-    
+    return Ok()
 
 ```
 
