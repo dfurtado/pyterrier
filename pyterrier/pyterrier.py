@@ -1,11 +1,9 @@
 import sys
-import re
 
-from socketserver import TCPServer
 from os.path import join, dirname
-from typing import List, Tuple, Any, Optional, Dict, Callable
+from typing import Tuple, Any, Optional, Dict
 
-from .http.http_handler  import HttpRequestHandler
+from .http.http_handler import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
