@@ -74,7 +74,7 @@ class PyTerrier():
         self._server.serve_forever()
 
 
-    def init_routes(self, prefix_routes: bool=False) -> None:
+    def init_routes(self, prefix_routes: Optional[bool]=False) -> None:
         """
         The init_routes function will get all routes and actions that have been
         created in files in the controllers folder and register within the
@@ -82,7 +82,7 @@ class PyTerrier():
 
         :Parameters:
 
-        - `prefix_routes` (optional): Tell the framework to prefix the route with the
+        - `prefix_routes`: Tell the framework to prefix the route with the
         name of the controller.
 
         .. Notes:: `controllers` are defined in the controllers directory in the
