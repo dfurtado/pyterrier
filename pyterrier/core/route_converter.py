@@ -1,5 +1,5 @@
 import re
-
+from pyterrier.validators.str_validators import is_none_or_empty
 
 class RouteConverter():
     """
@@ -24,11 +24,16 @@ class RouteConverter():
         - `route`: the action URI
         """
 
-        if route == None or route.isspace() or route == "":
-            raise TypeError("Required argument 'route' cannot be null or empty")
+        try:
 
-        for key in self._rules:
-            (m, n) = self._rules[key]
-            route = m.sub(n, route)
+            if is_none_or_empty(route):
+                raise TypeError()
 
-        return f"{route}{self._trailing_regex}"
+            for key in self._rules:
+                (m, n) = self._rules[key]
+                route = m.sub(n, route)
+
+            return f"{route}{self._trailing_regex}"
+
+        except (TypeError, AttributeError):
+            raise TypeError("The argument 'route' is not a `str` or it doesn't contain any value.")

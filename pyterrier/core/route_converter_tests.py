@@ -36,3 +36,8 @@ def test_registration_with_empty_route():
 def test_registration_with_blank_spaces():
     rc = RouteConverter()
     rc.convert("      ")
+
+@raises(TypeError)
+def test_registration_with_non_str_value():
+    rc = RouteConverter(1)
+
