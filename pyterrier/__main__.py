@@ -8,13 +8,13 @@ parser = ArgumentParser(prog="pyterrier", description="PyTerrier CLI")
 parser.add_argument("-v", "--version", action="version", version='%(prog)s 1.0')
 
 parser.add_argument("-c", "--currentdir", action="store_true", dest="create_on_curdir", default=False,
-                    help="Specify whether or not scaffold the application on the current directory.")
+                    help="specify whether or not scaffold the application on the current directory.")
 
 parser.add_argument("--newapp", type=str, metavar="NAME", dest="appname",
-                    help="Create a new PyTerrier application")
+                    help="creates a new PyTerrier application")
 
 parser.add_argument("--newcontroller", type=str, metavar="NAME", dest="ctrlname",
-                    help="Creates a new controller")
+                    help="creates a new controller")
 
 args = vars(parser.parse_args())
 
