@@ -11,9 +11,9 @@ def post(self):
     pass
 
 @put('/update')
-def get(self):
+def put(self):
     pass
 
 @delete('/delete')
-def get(self):
+def delete(self):
     pass
