@@ -209,6 +209,35 @@ def delete(self, id):
 
 ```
 
+## Try it out!!
+
+Unfortunately, PyTerrier is not in the PyPI yet, however, you can still try the framework. The easiest way
+is to clone this repo, add the directory where you cloned the project in the PYTHONPATH and create a
+project using to CLI.
+
+Though the CLI you can start a new project:
+
+```shell
+$ python -m pyterrier --newapp firstapp
+$ cd firstapp && python app.py
+```
+
+To get a full description of the options available in the CLI you can use the `-h` option:
+
+```shell
+usage: pyterrier [-h] [-v] [-c] [--newapp NAME] [--newcontroller NAME]
+
+PyTerrier CLI
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -c, --currentdir      specify whether or not scaffold the application on the
+                        current directory.
+  --newapp NAME         creates a new PyTerrier application
+  --newcontroller NAME  creates a new controller
+```
+
 ## Copyright and License
 
 Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code released under [the MIT license](LICENSE.md)

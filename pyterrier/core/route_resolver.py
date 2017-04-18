@@ -1,5 +1,8 @@
 import re
-from typing import Tuple, Callable, List, Dict, Any
+from typing import Tuple
+from typing import List
+from typing import Dict
+from typing import Any
 
 
 class RouteResolver:

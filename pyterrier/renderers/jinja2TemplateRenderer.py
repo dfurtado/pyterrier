@@ -1,6 +1,11 @@
-from jinja2 import Environment, FileSystemLoader
-from typing import List, Optional, Any
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+from typing import List
+from typing import Optional
+from typing import Any
+
 from .baseTemplateRenderer import BaseTemplateRenderer
+
 
 class Jinja2TemplateRenderer(BaseTemplateRenderer):
     """

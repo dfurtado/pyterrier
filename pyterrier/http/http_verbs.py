@@ -10,7 +10,7 @@ def get(route: str) -> Callable:
 
     To create a simple route without any parameters:
 
-    @get("/")
+    @get('/')
     def main(self):
         pass
 
@@ -21,7 +21,7 @@ def get(route: str) -> Callable:
     The @get decorator also accepts variable parameters in the route URL. This
     can be achieved using placeholders. For example:
 
-    @get("/user/{id:int}")
+    @get('/user/{id:int}')
     def get(self, id):
         pass
 

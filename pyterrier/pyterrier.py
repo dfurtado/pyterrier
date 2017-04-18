@@ -1,7 +1,11 @@
 import sys
 
-from os.path import join, dirname
-from typing import Tuple, Any, Optional, Dict
+from os.path import join
+from os.path import dirname
+from typing import Tuple
+from typing import Any
+from typing import Optional
+from typing import Dict
 
 from .http.http_handler import HttpRequestHandler
 from .core.route_converter import RouteConverter
@@ -13,7 +17,7 @@ from .renderers.baseTemplateRenderer import BaseTemplateRenderer
 class PyTerrier():
     def __init__(
             self,
-            hostname: Optional[str]="localhost",
+            hostname: Optional[str]='localhost',
             port: Optional[int]=8000,
             template_dir: Optional[str]=join(dirname(sys.argv[0]), 'templates'),
             static_files: Optional[str]=join(dirname(sys.argv[0]), 'static'),
@@ -29,9 +33,9 @@ class PyTerrier():
         - `static_files`: Folder that will contain all static files, images, stylesheets, fonts.
         - `renderer`: Specify the default template engine that will be used by the framework.
         """
-
+        
         if not issubclass(renderer, BaseTemplateRenderer):
-            raise TypeError("The parameter `renderer` needs to be a subclass of pyterrier.renderers.BaseTemplateRenderer")
+            raise TypeError('The parameter `renderer` needs to be a subclass of pyterrier.renderers.BaseTemplateRenderer')
 
         self._hostname = hostname
         self._port = port
@@ -51,9 +55,9 @@ class PyTerrier():
         Print the server information.
         """
 
-        print(f"Server started at http://{self._hostname}:{self._port}")
-        print(f"=> template_dir: {self._template_dir}")
-        print(f"=> static_dir: {self._static_files}")
+        print(f'Server started at http://{self._hostname}:{self._port}')
+        print(f'=> template_dir: {self._template_dir}')
+        print(f'=> static_dir: {self._static_files}')
 
 
     def run(self) -> None:
@@ -62,8 +66,8 @@ class PyTerrier():
         """
 
         options = {
-            "templates": self._template_dir,
-            "staticfiles": self._static_files
+            'templates': self._template_dir,
+            'staticfiles': self._static_files
         }
 
         handler = lambda *args: HttpRequestHandler(
@@ -134,9 +138,9 @@ class PyTerrier():
         If you intend to define the actions in files in the `controllers` folder use pyterrier.http.get instead.
 
         .. Usage::
-        @app.get("/api/get")
+        @app.get('/api/get')
         def get(self):
-            pass
+            ...
         """
 
         return lambda func: self._register_route(route, 'GET', func)
@@ -154,9 +158,9 @@ class PyTerrier():
         If you intend to define the actions in files in the `controllers` folder use pyterrier.http.post instead.
 
         .. Usage::
-        @app.post("/api/add")
+        @app.post('/api/add')
         def post(self):
-            pass
+            ...
         """
 
         return lambda func: self._register_route(route, 'POST', func)
@@ -174,9 +178,9 @@ class PyTerrier():
         If you intend to define the actions in files in the `controllers` folder use pyterrier.http.put instead.
 
         .. Usage::
-        @app.put("/api/add")
+        @app.put('/api/update')
         def put(self):
-            pass
+            ...
         """
 
         return lambda func: self._register_route(route, 'PUT', func)
@@ -194,9 +198,9 @@ class PyTerrier():
         If you intend to define the actions in files in the `controllers` folder use pyterrier.http.delete instead.
 
         .. Usage::
-        @app.delete("/api/delete")
+        @app.delete('/api/delete')
         def delete(self):
-            pass
+            ...
         """
 
         return lambda func: self._register_route(route, 'DELETE', func)

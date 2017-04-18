@@ -10,11 +10,11 @@ class RouteConverter():
     def __init__(self):
 
         self._rules = {
-            "integer_params": (re.compile("\{\w+:int\}"), "([0-9]*)"),
-            "str_param": (re.compile("\{\w+:str\}"), "(\w+)"),
+            'integer_params': (re.compile('\{\w+:int\}'), '([0-9]*)'),
+            'str_param': (re.compile('\{\w+:str\}'), '(\w+)'),
         }
 
-        self._trailing_regex = "\/{0,1}$"
+        self._trailing_regex = '\/{0,1}$'
 
     def convert(self, route: str) -> str:
         """
@@ -33,7 +33,7 @@ class RouteConverter():
                 (m, n) = self._rules[key]
                 route = m.sub(n, route)
 
-            return f"{route}{self._trailing_regex}"
+            return f'{route}{self._trailing_regex}'
 
         except (TypeError, AttributeError):
-            raise TypeError("The argument 'route' is not a `str` or it doesn't contain any value.")
+            raise TypeError('The argument `route` is not a `str` or it does not contain any value.')

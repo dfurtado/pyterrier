@@ -1,5 +1,8 @@
-from urllib.parse import urlparse, parse_qs
-from typing import Iterator, Dict
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
+from typing import Iterator
+from typing import Dict
+
 
 class Request:
     """

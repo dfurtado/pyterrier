@@ -35,20 +35,20 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
        self._config = config
        self._renderer = renderer
 
-       self._static_regex = re.compile("[/\w\-\.\_]+(?P<ext>\.\w{,4})$", re.IGNORECASE | re.DOTALL)
+       self._static_regex = re.compile('[/\w\-\.\_]+(?P<ext>\.\w{,4})$', re.IGNORECASE | re.DOTALL)
 
        BaseHTTPRequestHandler.__init__(self, *args)
 
        mimetypes.init()
 
 
-    def _send_response(self, results: Any, http_status: int, content_type: Optional[str]="text/html"):
+    def _send_response(self, results: Any, http_status: int, content_type: Optional[str]='text/html'):
         """ Prepare response to be sent to the client """
 
         self.send_response(http_status)
-        self.send_header("Content-type", content_type)
+        self.send_header('Content-type', content_type)
         self.end_headers()
-        self.wfile.write(bytes(results, "ISO-8859-1"))
+        self.wfile.write(bytes(results, 'ISO-8859-1'))
 
 
     def _decode_results(self, data: Any):
@@ -148,14 +148,14 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             response = (
                     self._renderer.render(view_result.template, view_result.context),
                     HTTPStatus.OK,
-                    "text/html",
+                    'text/html',
                     )
         except Exception as e:
             """ TODO: It should return a default error page here rather than JSON """
             response = (
                     str(e),
                     HTTPStatus.INTERNAL_SERVER_ERROR,
-                    "application/json",
+                    'application/json',
                     )
 
         return response
@@ -176,14 +176,14 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             response = (
                     json.dumps(json_result.data, cls=DefaultJsonEncoder),
                     json_result.http_status,
-                    "application/json",
+                    'application/json',
                     )
 
         except TypeError as e:
             response = (
                     str(e),
                     HTTPStatus.INTERNAL_SERVER_ERROR,
-                    "application/json",
+                    'application/json',
                     )
 
         return response
@@ -200,8 +200,8 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         match = self._static_regex.search(path)
 
-        if  match != None and match.group("ext") != None:
-            return mimetypes.types_map[match.group("ext")]
+        if  match != None and match.group('ext') != None:
+            return mimetypes.types_map[match.group('ext')]
 
 
     def _serve_file(self, path: str):
@@ -217,15 +217,15 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         mime_type = self.get_mime_type(path)
 
         if mime_type == None:
-            self._send_response("Unsupported media type.", HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+            self._send_response('Unsupported media type.', HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
 
         if not os.path.exists(path):
-            self._send_response("File not found.", HTTPStatus.NOT_FOUND)
+            self._send_response('File not found.', HTTPStatus.NOT_FOUND)
         else:
             try:
-                with open(path, encoding = "ISO-8859-1") as f:
+                with open(path, encoding = 'ISO-8859-1') as f:
                     results = f.read()
                     self._send_response(results, HTTPStatus.OK, mime_type)
             except:
-                self._send_response("Internal Error {}".format(sys.exc_info()[0]), HTTPStatus.INTERNAL_SERVER_ERROR)
+                self._send_response('Internal Error {}'.format(sys.exc_info()[0]), HTTPStatus.INTERNAL_SERVER_ERROR)
                 raise

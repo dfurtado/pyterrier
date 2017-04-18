@@ -1,4 +1,7 @@
-import os, glob, re, sys
+import os
+import glob
+import re
+import sys
 
 
 class RouteDiscovery:
@@ -7,12 +10,11 @@ class RouteDiscovery:
     it actions.
     """
 
-
     def __init__(self):
         self._actions = []
         self.controllers = []
-        self._controller_folder = "controllers"
-        self._recontroller = re.compile(r"[\w\-]+(Controller)$")
+        self._controller_folder = 'controllers'
+        self._recontroller = re.compile(r'[\w\-]+(Controller)$')
 
 
     @property
@@ -45,12 +47,12 @@ class RouteDiscovery:
         controllers = [getattr(modules, ctrl) for ctrl in dir(modules) if re.match(self._recontroller, ctrl)]
 
         if len(controllers) <= 0:
-            print("Any controller has been registered.")
+            print('Any controller has been registered.')
             return
 
         for controller in controllers:
             # First all dunder functions and properties are excluded
-            controller_functions = [getattr(controller, func) for func in dir(controller) if not func.startswith("__")]
+            controller_functions = [getattr(controller, func) for func in dir(controller) if not func.startswith('__')]
 
             # Get only tuples (actions defined in the controllers)
             actions = [action for action in controller_functions if isinstance(action, tuple)]
@@ -79,16 +81,16 @@ class RouteDiscovery:
         prefixed = []
 
         for route, verb, func in actions:
-            module, name = controller.__name__.split(".")
-            name = name.replace("Controller", "")
-            prefixed.append((f"/{name}{route}", verb, func))
+            module, name = controller.__name__.split('.')
+            name = name.replace('Controller', '')
+            prefixed.append((f'/{name}{route}', verb, func))
 
         return prefixed
 
 
     def _import_modules(self):
         """
-        Import all the content of the "controllers" directory and returns the
+        Import all the content of the controllers directory and returns the
         module object.
         """
 
@@ -99,8 +101,8 @@ class RouteDiscovery:
 
     def _get_controllers(self):
         """
-        Get a list of files in the "controllers" directory.
+        Get a list of files in the controllers directory.
         """
 
-        return [filename.replace(".py","") for filename in os.listdir("controllers")
+        return [filename.replace('.py','') for filename in os.listdir('controllers')
                 if filename.endswith('Controller.py')]

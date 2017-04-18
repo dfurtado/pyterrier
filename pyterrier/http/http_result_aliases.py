@@ -9,3 +9,6 @@ def Ok(data:Any={}):
 
 def NotFound():
     return HttpResult({}, HTTPStatus.NOT_FOUND)
+
+def NoContent():
+    return HttpResult({}, HTTPStatus.NO_CONTENT)
