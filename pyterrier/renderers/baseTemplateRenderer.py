@@ -1,5 +1,6 @@
 from typing import Any
 
+
 class BaseTemplateRenderer:
 
     def __init__(self) -> None:

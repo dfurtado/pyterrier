@@ -6,8 +6,8 @@ import sys
 
 class RouteDiscovery:
     """
-    Get all files in the default controllers folder, import all the files and register
-    it actions.
+    Get all files in the default controllers folder, import all the
+    files and register it actions.
     """
 
     def __init__(self):
@@ -15,7 +15,6 @@ class RouteDiscovery:
         self.controllers = []
         self._controller_folder = 'controllers'
         self._recontroller = re.compile(r'[\w\-]+(Controller)$')
-
 
     @property
     def actions(self):
@@ -26,7 +25,6 @@ class RouteDiscovery:
 
         return self._actions
 
-
     def register_actions(self, prefix_routes):
         """
         Register actions in the controller in the controller directory.
@@ -35,16 +33,18 @@ class RouteDiscovery:
         - `prefix_routes`: Tell the framework to prefix the route with the
         name of the controller.
 
-        .. Notes:: `controllers` are defined in the controllers directory in the
-        application's root directory. For instance, if the application has a controller
-        named `userController.py` and for this controller there's a action defined with
-        the route /get/{id:int}, if `init_route` is called with the parameter `prefix_route`
-        set to `True`, the action will be registered as /user/get/{id:int}
+        .. Notes:: `controllers` are defined in the controllers directory in
+        the application's root directory. For instance, if the application has
+        a controller named `userController.py` and for this controller there's
+        a action defined with the route /get/{id:int}, if `init_route` is
+        called with the parameter `prefix_route` set to `True`, the action will
+        be registered as /user/get/{id:int}
         """
 
         modules = self._import_modules()
         # Get a list of the controller that have been successfully imported.
-        controllers = [getattr(modules, ctrl) for ctrl in dir(modules) if re.match(self._recontroller, ctrl)]
+        controllers = [getattr(modules, ctrl) for ctrl in dir(modules)
+                       if re.match(self._recontroller, ctrl)]
 
         if len(controllers) <= 0:
             print('Any controller has been registered.')
@@ -52,16 +52,18 @@ class RouteDiscovery:
 
         for controller in controllers:
             # First all dunder functions and properties are excluded
-            controller_functions = [getattr(controller, func) for func in dir(controller) if not func.startswith('__')]
+            controller_functions = [getattr(controller, func)
+                                    for func in dir(controller)
+                                    if not func.startswith('__')]
 
             # Get only tuples (actions defined in the controllers)
-            actions = [action for action in controller_functions if isinstance(action, tuple)]
+            actions = [action for action in controller_functions
+                       if isinstance(action, tuple)]
 
             if prefix_routes:
                 actions = self._prefix_routes(controller, actions)
 
             self._actions.extend(actions)
-
 
     def _prefix_routes(self, controller, actions):
         """
@@ -87,7 +89,6 @@ class RouteDiscovery:
 
         return prefixed
 
-
     def _import_modules(self):
         """
         Import all the content of the controllers directory and returns the
@@ -95,14 +96,16 @@ class RouteDiscovery:
         """
 
         self._controllers = self._get_controllers()
-        modules = __import__('controllers', globals(), locals(), self._controllers, 0)
+        modules = __import__('controllers',
+                             globals(),
+                             locals(),
+                             self._controllers,
+                             0)
         return modules
 
-
     def _get_controllers(self):
-        """
-        Get a list of files in the controllers directory.
-        """
+        """ Get a list of files in the controllers directory. """
 
-        return [filename.replace('.py','') for filename in os.listdir('controllers')
+        return [filename.replace('.py', '')
+                for filename in os.listdir('controllers')
                 if filename.endswith('Controller.py')]

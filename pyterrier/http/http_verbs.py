@@ -25,10 +25,12 @@ def get(route: str) -> Callable:
     def get(self, id):
         pass
 
-    In this case when the client send a HTTP GET request to /users/1, the function
-    get_user will be executed and the id integer parameter will be passed to it.
+    In this case when the client send a HTTP GET request to /users/1, the
+    function get_user will be executed and the id integer parameter will
+    be passed to it.
 
-    The format for the placeholders are {name:type} where type can be: str or int.
+    The format for the placeholders are {name:type} where type
+    can be: str or int.
 
     """
 

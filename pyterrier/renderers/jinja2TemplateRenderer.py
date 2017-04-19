@@ -8,12 +8,15 @@ from .baseTemplateRenderer import BaseTemplateRenderer
 
 
 class Jinja2TemplateRenderer(BaseTemplateRenderer):
-    """
-    The framework's default renderer, which is a wrapper to Jinja2
-    """
+    """ The framework's default renderer """
 
-    def __init__(self, template_dir: str, extensions: Optional[List[str]] = []) -> None:
-        """ Create a new template renderer. By default PyTerrier is using Jinja2 """
+    def __init__(self,
+                 template_dir: str,
+                 extensions: Optional[List[str]] = []) -> None:
+        """
+        Create a new template renderer. By default PyTerrier
+        is using Jinja2
+        """
 
         self._loader = FileSystemLoader(template_dir)
         self._env = Environment(loader=self._loader, extensions=extensions)

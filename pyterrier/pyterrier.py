@@ -1,7 +1,7 @@
 import sys
-
 from os.path import join
 from os.path import dirname
+
 from typing import Tuple
 from typing import Any
 from typing import Optional
@@ -11,17 +11,19 @@ from .http.http_handler import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
-from .renderers.jinja2TemplateRenderer  import Jinja2TemplateRenderer
-from .renderers.baseTemplateRenderer import BaseTemplateRenderer
+from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
+from .renderers.baseTemplateRenderer import BaseTemplateRenderer as base_tpl
+
 
 class PyTerrier():
+
     def __init__(
             self,
             hostname: Optional[str]='localhost',
             port: Optional[int]=8000,
-            template_dir: Optional[str]=join(dirname(sys.argv[0]), 'templates'),
-            static_files: Optional[str]=join(dirname(sys.argv[0]), 'static'),
-            renderer: Optional[BaseTemplateRenderer]=Jinja2TemplateRenderer) -> None:
+            template_dir: Optional[str]='templates',
+            static_files: Optional[str]='static',
+            renderer: Optional[base_tpl]=Jinja2TemplateRenderer) -> None:
         """
         Create a new PyTerrier application
 
@@ -30,18 +32,22 @@ class PyTerrier():
         - `hostname`: The hostname the server will be created.
         - `port`: Which port the server will listen for connections.
         - `template_dir`: Folder where to find the site templates.
-        - `static_files`: Folder that will contain all static files, images, stylesheets, fonts.
-        - `renderer`: Specify the default template engine that will be used by the framework.
+        - `static_files`: Folder that will contain all static files, images,
+        stylesheets, fonts.
+        - `renderer`: Specify the default template engine that will be used
+        by the framework.
         """
-        
-        if not issubclass(renderer, BaseTemplateRenderer):
-            raise TypeError('The parameter `renderer` needs to be a subclass of pyterrier.renderers.BaseTemplateRenderer')
+
+        if not issubclass(renderer, base_tpl):
+            error_msg = ('The parameter `renderer` needs to be a subclass of '
+                         'pyterrier.renderers.BaseTemplateRenderer')
+            raise TypeError(error_msg)
 
         self._hostname = hostname
         self._port = port
 
-        self._template_dir = template_dir
-        self._static_files = static_files
+        self._template_dir = join(dirname(sys.argv[0]), template_dir)
+        self._static_files = join(dirname(sys.argv[0]), static_files)
 
         self._route_discovery = RouteDiscovery()
         self.route_converter = RouteConverter()
@@ -49,20 +55,17 @@ class PyTerrier():
 
         self._renderer = renderer(self._template_dir)
 
-
     def _print_config(self) -> None:
-        """
-        Print the server information.
-        """
+        """ Print the server information. """
 
         print(f'Server started at http://{self._hostname}:{self._port}')
         print(f'=> template_dir: {self._template_dir}')
         print(f'=> static_dir: {self._static_files}')
 
-
     def run(self) -> None:
         """
-        Start the server and listen on the specified port for new connections.
+        Start the server and listen on the specified port
+        for new connections.
         """
 
         options = {
@@ -71,12 +74,11 @@ class PyTerrier():
         }
 
         handler = lambda *args: HttpRequestHandler(
-                self._route_table, options, self._renderer,*args)
+                self._route_table, options, self._renderer, *args)
 
         self._print_config()
         self._server = ThreadedServer((self._hostname, self._port), handler)
         self._server.serve_forever()
-
 
     def init_routes(self, prefix_routes: Optional[bool]=False) -> None:
         """
@@ -89,11 +91,12 @@ class PyTerrier():
         - `prefix_routes`: Tell the framework to prefix the route with the
         name of the controller.
 
-        .. Notes:: `controllers` are defined in the controllers directory in the
-        application's root directory. For instance, if the application has a controller
-        named `userController.py` and for this controller there's a action defined with
-        the route /get/{id:int}, if `init_route` is called with the parameter `prefix_route`
-        set to `True`, the action will be registered as /user/get/{id:int}
+        .. Notes:: `controllers` are defined in the controllers directory in
+        the application's root directory. For instance, if the application
+        has a controller named `userController.py` and for this controller
+        there's a action defined with the route /get/{id:int}, if `init_route`
+        is called with the parameter `prefix_route` set to `True`, the action
+        will be registered as /user/get/{id:int}
 
         :Usage:
 
@@ -105,7 +108,6 @@ class PyTerrier():
 
         for route in self._route_discovery.actions:
             self._register_route(*route)
-
 
     def _register_route(self, route: str, verb: str, func):
         """
@@ -130,12 +132,15 @@ class PyTerrier():
         Decorator for GET actions.
 
         :Parameters:
-        - `route`: the URL where the decorated function (action) can be invoked.
+        - `route`: the URL where the decorated function (action)
+        can be invoked.
 
-        .. Note:: This decorator has the same functionality as the decorator @get in pyterrier.http module, the main
-        difference is that this decorator are meant to be used when defining actions in the same file
-        where the instance of PyTerrier is created.
-        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.get instead.
+        .. Note:: This decorator has the same functionality as the decorator
+        @get in pyterrier.http module, the main difference is that this
+        decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created. If you intend to define
+        the actions in files in the `controllers` folder use pyterrier.http.get
+        instead.
 
         .. Usage::
         @app.get('/api/get')
@@ -150,12 +155,15 @@ class PyTerrier():
         Decorator for POST actions
 
         :Parameters:
-        - `route`: the URL where the decorated function (action) can be invoked.
+        - `route`: the URL where the decorated function (action) can be
+        invoked.
 
-        .. Note:: This decorator has the same functionality as the @post decorator in pyterrier.http.post module, the main
-        difference is that this decorator are meant to be used when defining actions in the same file
-        where the instance of PyTerrier is created.
-        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.post instead.
+        .. Note:: This decorator has the same functionality as the @post
+        decorator in pyterrier.http.post module, the main difference is that
+        this decorator are meant to be used when defining actions in the same
+        file where the instance of PyTerrier is created. If you intend to
+        define the actions in files in the `controllers` folder use
+        pyterrier.http.post instead.
 
         .. Usage::
         @app.post('/api/add')
@@ -170,12 +178,15 @@ class PyTerrier():
         Decorator for PUT actions.
 
         :Parameters:
-        - `route`: the URL where the decorated function (action) can be invoked.
+        - `route`: the URL where the decorated function (action) can be
+        invoked.
 
-        .. Note:: This decorator has the same functionality as the @put decorator in pyterrier.http module, the main
-        difference is that this decorator are meant to be used when defining actions in the same file
+        .. Note:: This decorator has the same functionality as the @put
+        decorator in pyterrier.http module, the main difference is that this
+        decorator are meant to be used when defining actions in the same file
         where the instance of PyTerrier is created.
-        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.put instead.
+        If you intend to define the actions in files in the `controllers`
+        folder use pyterrier.http.put instead.
 
         .. Usage::
         @app.put('/api/update')
@@ -190,12 +201,15 @@ class PyTerrier():
         Decorator for DELETE actions.
 
         :Parameters:
-        - `route`: the URL where the decorated function (action) can be invoked.
+        - `route`: the URL where the decorated function (action) can be
+        invoked.
 
-        .. Note:: This decorator has the same functionality as the @delete decorator in pyterrier.http module, the main
-        difference is that this decorator are meant to be used when defining actions in the same file
-        where the instance of PyTerrier is created.
-        If you intend to define the actions in files in the `controllers` folder use pyterrier.http.delete instead.
+        .. Note:: This decorator has the same functionality as the @delete
+        decorator in pyterrier.http module, the main difference is that this
+        decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created. If you intend to define
+        the actions in files in the `controllers` folder use
+        pyterrier.http.delete instead.
 
         .. Usage::
         @app.delete('/api/delete')

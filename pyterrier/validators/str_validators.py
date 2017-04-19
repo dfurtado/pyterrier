@@ -1,2 +1,3 @@
 
-is_none_or_empty = lambda arg: (arg == None or arg =='' or arg.isspace())
+def is_none_or_empty(arg):
+    return arg is None or arg == '' or arg.isspace()

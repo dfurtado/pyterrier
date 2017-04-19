@@ -1,6 +1,7 @@
 import re
 from pyterrier.validators.str_validators import is_none_or_empty
 
+
 class RouteConverter():
     """
     Helper class to convert the route URI into a regular expression that will
@@ -36,4 +37,6 @@ class RouteConverter():
             return f'{route}{self._trailing_regex}'
 
         except (TypeError, AttributeError):
-            raise TypeError('The argument `route` is not a `str` or it does not contain any value.')
+            message = ('The argument `route` is not a `str` or it does'
+                       'not contain any value.')
+            raise TypeError(message)
