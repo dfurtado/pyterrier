@@ -1,1 +1,1 @@
-from .baseTemplateRenderer import BaseTemplateRenderer
+from .base_renderer import BaseRenderer

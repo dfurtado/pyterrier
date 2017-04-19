@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class BaseTemplateRenderer:
+class BaseRenderer:
 
     def __init__(self) -> None:
         pass

@@ -11,8 +11,8 @@ from .http.http_handler import HttpRequestHandler
 from .core.route_converter import RouteConverter
 from .core.threaded_server import ThreadedServer
 from .core.route_discovery import RouteDiscovery
-from .renderers.jinja2TemplateRenderer import Jinja2TemplateRenderer
-from .renderers.baseTemplateRenderer import BaseTemplateRenderer as base_tpl
+from .renderers.jinja2_renderer import Jinja2Renderer
+from .renderers.base_renderer import BaseRenderer
 
 
 class PyTerrier():
@@ -23,7 +23,7 @@ class PyTerrier():
             port: Optional[int]=8000,
             template_dir: Optional[str]='templates',
             static_files: Optional[str]='static',
-            renderer: Optional[base_tpl]=Jinja2TemplateRenderer) -> None:
+            renderer: Optional[BaseRenderer]=Jinja2Renderer) -> None:
         """
         Create a new PyTerrier application
 
@@ -38,7 +38,7 @@ class PyTerrier():
         by the framework.
         """
 
-        if not issubclass(renderer, base_tpl):
+        if not issubclass(renderer, BaseRenderer):
             error_msg = ('The parameter `renderer` needs to be a subclass of '
                          'pyterrier.renderers.BaseTemplateRenderer')
             raise TypeError(error_msg)

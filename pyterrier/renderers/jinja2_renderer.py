@@ -4,10 +4,10 @@ from typing import List
 from typing import Optional
 from typing import Any
 
-from .baseTemplateRenderer import BaseTemplateRenderer
+from .base_renderer import BaseRenderer
 
 
-class Jinja2TemplateRenderer(BaseTemplateRenderer):
+class Jinja2Renderer(BaseRenderer):
     """ The framework's default renderer """
 
     def __init__(self,
