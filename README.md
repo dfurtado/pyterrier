@@ -18,7 +18,7 @@ The quickest way to get started is to use the PyTerrier CLI
 
 1. Clone the repository.
 ```shell
-$ git clone http://github.com/dfurtado/pyterrier.git
+$ git clone https://github.com/dfurtado/pyterrier.git
 ```
 
 2. Create a virtual environment and install the project dependencies:
@@ -180,7 +180,7 @@ called `userController.py` with the following contents:
 ``` python
 from pyterrier import PyTerrier
 from pyterrier.http import Ok, NotFound, get
-from http import HTTPStatus
+
 
 @get("/get/{id:int}")
 def get(self, id):
@@ -223,6 +223,7 @@ get the request data out of `self.request.params`:
 ```python
 from pyterrier.http import Ok, post
 
+
 @post("/add")
 def add(self):
 
@@ -237,6 +238,7 @@ def add(self):
 ## PUT request
 ```python
 from pyterrier.http import Ok, put
+
 
 @put("/update")
 def update(self):
@@ -253,6 +255,7 @@ def update(self):
 
 ```python
 from pyterrier.http import Ok, delete
+
 
 @delete("/user/{id:int}/delete")
 def delete(self, id):
