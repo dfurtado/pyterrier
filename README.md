@@ -12,9 +12,60 @@ we can take advantage of all its neat features. PyTerrier is highly inspired by 
 - Flexible
 - Provide a clean project structure
 
+## Quick start
+
+The quickest way to get started is to use the PyTerrier CLI
+
+1. Clone the repository.
+```shell
+$ git clone http://github.com/dfurtado/pyterrier.git
+```
+
+2. Create a virtual environment and install the project dependencies:
+```
+$ cd pyterrier && pip install -r requirements.txt
+```
+
+3. Add the directory where you cloned PyTerrier to the PYTHONPATH variable.
+
+**Unix/Linux/MacOSX**
+```shell
+$ export PYTHONPATH=$PYTHONPATH:<PyTerrier directory>
+```
+
+**Windows**
+```shell
+set PYTHONPATH=%PYTHONPATH%;<PyTerrier directory>
+```
+
+4. Now you can call the PyTerrier CLI or import PyTerrier outside the frameworks folder.
+To create you first appready to create your first app
+```shell
+$ python -m pyterrier --newapp firstapp
+$ cd firstapp && python app.py
+```
+
+By default, the application will run on the port 8000. Just browse to http://localhost:8000
+
+To get a full description of the options available in the CLI you can use the `-h` option:
+
+```text
+usage: pyterrier [-h] [-v] [-c] [--newapp NAME] [--newcontroller NAME]
+
+PyTerrier CLI
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -c, --currentdir      specify whether or not scaffold the application on the
+                        current directory.
+  --newapp NAME         creates a new PyTerrier application
+  --newcontroller NAME  creates a new controller
+```
+
 ## Show me some code!!
 
-PyTerrier favorite conventions over configurations, that mean the project have to follow a certain structure to
+PyTerrier favorite conventions over configurations, that means the project have to follow a certain structure to
 work, for instance, a minimum bare bone PyTerrier application would have the following structure:
 
 ```bash
@@ -42,9 +93,9 @@ from pyterrier.http import ViewResult
 
 app = PyTerrier(port=3000)
 
-@app.get("/sayhello")
+@app.get('/sayhello')
 def sayhello(self):
-    return ViewResult("index.html", { "message": "Hellooooo!" })
+    return ViewResult('index.html', { 'message': 'Hellooooo!' })
 ```
 
 This code will start a server running on the port 3000 and it will define a function that will be executed
@@ -89,6 +140,7 @@ Now let's say we want to pass a parameter in the URL, you achieve that using a p
 from pyterrier import PyTerrier
 from pyterrier.http import ViewResult
 
+
 app = PyTerrier(port=3000)
 
 @app.get("/sayhello/to/{name:str}")
@@ -100,16 +152,17 @@ Hellooooo, daniel! will be returned.
 
 At the moment only `str` and `int` parameter placeholders are supported.
 
-To return a JSON result we can use the class HttpResult:
+To return a HTTP/200 response with the results, you can use the
+`Ok` function.
 
 ``` python
 from pyterrier import PyTerrier
 from pyterrier.http import Ok, NotFound
-from http import HTTPStatus
+
 
 app = PyTerrier(port=3000)
 
-@app.get("/api/user/{id:int}")
+@app.get('/api/user/{id:int}')
 def get(self, id):
     user = user_repository.get(id)
 
@@ -118,8 +171,6 @@ def get(self, id):
 
     return Ok(user)
 ```
-
-If `HTTPStatus` argument is not specified, `HttpResult` will return a `HTTPStatus.OK` by default.
 
 Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention
 PyTerrier looks for actions registered in files inside the `controllers` folder in the application root.
@@ -148,6 +199,7 @@ from pyterrier import PyTerrier
 
 
 app = PyTerrier(port=3000)
+
 
 def main():
     app.init_routes(prefix_routes=True)
@@ -207,35 +259,6 @@ def delete(self, id):
     deleted = user_repository.delete(id)
     return Ok()
 
-```
-
-## Try it out!!
-
-Unfortunately, PyTerrier is not in the PyPI yet, however, you can still try the framework. The easiest way
-is to clone this repo, add the directory where you cloned the project in the PYTHONPATH and create a
-project using to CLI.
-
-Though the CLI you can start a new project:
-
-```shell
-$ python -m pyterrier --newapp firstapp
-$ cd firstapp && python app.py
-```
-
-To get a full description of the options available in the CLI you can use the `-h` option:
-
-```shell
-usage: pyterrier [-h] [-v] [-c] [--newapp NAME] [--newcontroller NAME]
-
-PyTerrier CLI
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
-  -c, --currentdir      specify whether or not scaffold the application on the
-                        current directory.
-  --newapp NAME         creates a new PyTerrier application
-  --newcontroller NAME  creates a new controller
 ```
 
 ## Copyright and License
