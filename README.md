@@ -266,4 +266,4 @@ def delete(self, id):
 
 ## Copyright and License
 
-Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code released under [the MIT license](LICENSE.md)
+Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code released under [BSD 3-clause license](LICENSE)
