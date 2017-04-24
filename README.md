@@ -14,32 +14,24 @@ we can take advantage of all its neat features. PyTerrier is highly inspired by 
 
 ## Quick start
 
-The quickest way to get started is to use the PyTerrier CLI
+The quickest way to get started is to install PyTerrier on a virtual environment and use the PyTerrier CLI to create a 
+new project:
 
-1. Clone the repository.
+1. Create a virtual environment
+
+2. Install Pyterrier
 ```shell
-$ git clone https://github.com/dfurtado/pyterrier.git
+$ pip install -e git+https://github.com/dfurtado/pyterrier.git#egg=pyterrier
 ```
 
-2. Create a virtual environment and install the project dependencies:
-```
-$ cd pyterrier && pip install -r requirements.txt
-```
-
-3. Add the directory where you cloned PyTerrier to the PYTHONPATH variable.
-
-**Unix/Linux/MacOSX**
+3. Alternatively, you can clone the project and install from your local directory
 ```shell
-$ export PYTHONPATH=$PYTHONPATH:<PyTerrier directory>
-```
-
-**Windows**
-```shell
-set PYTHONPATH=%PYTHONPATH%;<PyTerrier directory>
+$ git clone git@github.com:dfurtado/pyterrier.git
+$ pip install -e [path to pyterrier]
 ```
 
 4. Now you can call the PyTerrier CLI or import PyTerrier outside the frameworks folder.
-To create your first app, you can just do:
+To create your first app, you can run:
 ```shell
 $ python -m pyterrier --newapp firstapp
 $ cd firstapp && python app.py
