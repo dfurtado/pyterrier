@@ -39,7 +39,7 @@ set PYTHONPATH=%PYTHONPATH%;<PyTerrier directory>
 ```
 
 4. Now you can call the PyTerrier CLI or import PyTerrier outside the frameworks folder.
-To create you first appready to create your first app
+To create your first app, you can just do:
 ```shell
 $ python -m pyterrier --newapp firstapp
 $ cd firstapp && python app.py
