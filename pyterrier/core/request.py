@@ -1,3 +1,4 @@
+from http import cookies
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from typing import Iterator
@@ -14,10 +15,16 @@ class Request:
         self._requestline = request.requestline
         self._headers = {k: v for (k, v) in request.headers.items()}
         self._params = self._parse_params(request)
+        self._cookies = cookies.SimpleCookie()
+        self._cookies.load(self._headers['Cookie'])
 
     @property
     def params(self) -> Iterator[object]:
         return self._params
+
+    @property
+    def cookies(self):
+        return self._cookies
 
     @property
     def path(self) -> str:
