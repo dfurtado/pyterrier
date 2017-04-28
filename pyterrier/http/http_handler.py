@@ -55,7 +55,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         self.send_response(http_status)
         self.send_header('Content-type', content_type)
         self.end_headers()
-        self.wfile.write(bytes(results, 'ISO-8859-1'))
+        self.wfile.write(bytes(results, 'utf-8'))
 
     def _decode_results(self, data: Any):
         """ Decode the binary strings to utf-8 """
@@ -106,7 +106,6 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         """
 
         try:
-
             request = Request(self)
 
             action_info = self._resolver.resolve(request.path)
@@ -222,7 +221,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             self._send_response('File not found.', HTTPStatus.NOT_FOUND)
         else:
             try:
-                with open(path, encoding='ISO-8859-1') as f:
+                with open(path, encoding='utf-8') as f:
                     results = f.read()
                     self._send_response(results, HTTPStatus.OK, mime_type)
             except:
