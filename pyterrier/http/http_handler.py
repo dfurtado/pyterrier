@@ -74,7 +74,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         try:
 
-            action_info = self._resolver.resolve(self.path)
+            action_info = self._resolver.resolve(self.path,'POST')
 
             ctype, pdict = cgi.parse_header(self.headers.get_content_type())
 
@@ -107,9 +107,9 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         try:
             request = Request(self)
-
-            action_info = self._resolver.resolve(request.path)
-
+            
+            action_info = self._resolver.resolve(request.path, 'GET')
+            
             if action_info is not None:
                 (verb, handler, params) = action_info
                 handler.__self__.request = request

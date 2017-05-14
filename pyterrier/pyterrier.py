@@ -1,6 +1,9 @@
 import sys
+import re
+
 from os.path import join
 from os.path import dirname
+from http import HTTPStatus
 
 from typing import Tuple
 from typing import Any
@@ -124,8 +127,13 @@ class PyTerrier():
         func.__setattr__('request', None)
         action = func.__get__(func, type(func))
 
-        r = self.route_converter.convert(route)
-        self._route_table.update({r: (verb, action)})
+        uri_regex = self.route_converter.convert(route)
+        compiled_uri_regex = re.compile(uri_regex)
+        
+        try:
+            self._route_table[verb].append((compiled_uri_regex, action))
+        except KeyError:
+            self._route_table[verb] = [(compiled_uri_regex, action)]
 
     def get(self, route: str):
         """

@@ -16,7 +16,11 @@ class Request:
         self._headers = {k: v for (k, v) in request.headers.items()}
         self._params = self._parse_params(request)
         self._cookies = cookies.SimpleCookie()
-        self._cookies.load(self._headers['Cookie'])
+
+        try:
+            self._cookies.load(self._headers['Cookie'])
+        except KeyError:
+            self._cookies = None
 
     @property
     def params(self) -> Iterator[object]:
