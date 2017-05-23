@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dfurtado/pyterrier.svg?branch=master)](https://travis-ci.org/dfurtado/pyterrier)
+
 # PyTerrier :dog:
 
 This project has started out of my curiosity to understand how web frameworks work under the hood, to study
