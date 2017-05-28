@@ -258,6 +258,10 @@ def delete(self, id):
 
 ```
 
+## Contributing to the project
+
+See [contributing.md](contributing.md) for more details.
+
 ## Copyright and License
 
 Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code released under [BSD 3-clause license](LICENSE)
