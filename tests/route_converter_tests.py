@@ -1,5 +1,5 @@
 from nose.tools import raises
-from .route_converter import RouteConverter
+from pyterrier.core.route_converter import RouteConverter
 
 
 def test_registration_with_one_int_param():
