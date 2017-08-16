@@ -11,8 +11,8 @@ If you are ready to write some code:
 
 1. Fork the project
 2. Create a new branch from the development branch
-3. Hack away in the branch on your branch
-4. When you are ready, submit the pull request.
+3. Hack away
+4. When you are ready, submit the pull request
 
 ## branch guidelines
 
