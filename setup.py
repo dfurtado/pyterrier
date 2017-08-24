@@ -10,6 +10,5 @@ setup(
     install_requires=[
         "Jinja2 == 2.8",
         "nose == 1.3.7",
-        "Django == 1.11.4",
     ],
 )
