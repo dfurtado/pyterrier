@@ -54,6 +54,14 @@ def put(route: str) -> Callable:
 
     return lambda func: (route, 'PUT', func)
 
+def patch(route: str) -> Callable:
+    """
+    States that a function will be executed when a PATCH request
+    is sent to the server.
+    """
+
+    return lambda func: (route, 'PATCH', func)
+
 
 def delete(route: str) -> Callable:
     """
