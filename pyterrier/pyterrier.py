@@ -129,7 +129,7 @@ class PyTerrier():
 
         uri_regex = self.route_converter.convert(route)
         compiled_uri_regex = re.compile(uri_regex)
-        
+
         try:
             self._route_table[verb].append((compiled_uri_regex, action))
         except KeyError:
@@ -203,6 +203,29 @@ class PyTerrier():
         """
 
         return lambda func: self._register_route(route, 'PUT', func)
+
+    def patch(self, route: str):
+        """
+        Decorator for PATCH actions.
+
+        :Parameters:
+        - `route`: the URL where the decorated function (action) can be
+        invoked.
+
+        .. Note:: This decorator has the same functionality as the @patch
+        decorator in pyterrier.http module, the main difference is that this
+        decorator are meant to be used when defining actions in the same file
+        where the instance of PyTerrier is created.
+        If you intend to define the actions in files in the `controllers`
+        folder use pyterrier.http.patch instead.
+
+        .. Usage::
+        @app.patch('/api/update')
+        def patch(self):
+            ...
+        """
+
+        return lambda func: self._register_route(route, 'PATCH', func)
 
     def delete(self, route: str):
         """

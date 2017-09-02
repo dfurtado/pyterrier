@@ -69,6 +69,9 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
     def do_PUT(self) -> None:
         self.do_POST()
 
+    def do_PATCH(self) -> None:
+        self.do_POST()
+
     def do_POST(self) -> None:
         """ Handler POST requests """
 
@@ -107,9 +110,9 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         try:
             request = Request(self)
-            
+
             action_info = self._resolver.resolve(request.path, 'GET')
-            
+
             if action_info is not None:
                 (verb, handler, params) = action_info
                 handler.__self__.request = request
