@@ -6,9 +6,7 @@ import re
 import sys
 
 from typing import Any
-from typing import Callable
 from typing import Tuple
-from typing import List
 from typing import Optional
 from typing import Dict
 
@@ -77,7 +75,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         try:
 
-            action_info = self._resolver.resolve(self.path,'POST')
+            action_info = self._resolver.resolve(self.path, 'POST')
 
             ctype, pdict = cgi.parse_header(self.headers.get_content_type())
 
@@ -227,7 +225,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                 with open(path, encoding='utf-8') as f:
                     results = f.read()
                     self._send_response(results, HTTPStatus.OK, mime_type)
-            except:
+            except Exception:
                 self._send_response(f'Internal Error {sys.exc_info()[0]}',
                                     HTTPStatus.INTERNAL_SERVER_ERROR)
                 raise

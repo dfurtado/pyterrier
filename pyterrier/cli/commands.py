@@ -14,7 +14,10 @@ def create_app(app_name, create_on_curdir=False):
 
     print(f'\nCreating a new application: {app_name}')
 
-    root_dir = os.path.join(os.curdir, app_name if not create_on_curdir else '')
+    root_dir = os.path.join(os.curdir, app_name
+                            if not create_on_curdir
+                            else '')
+
     tpl_dir = os.path.join(root_dir, 'templates')
     ctrl_dir = os.path.join(root_dir, 'controllers')
 
@@ -27,8 +30,8 @@ def create_app(app_name, create_on_curdir=False):
             os.mkdir('controllers')
 
     except OSError:
-        print(f'error: the folder you are trying to create the app `{app_name}` already exist', 
-                file=sys.stderr)
+        print(('Error: the folder you are trying to create the app '
+               f'`{app_name}` already exist'), file=sys.stderr)
         sys.exit()
 
     except FileExistsError as e:
@@ -44,14 +47,16 @@ def create_app(app_name, create_on_curdir=False):
             'To start your app:\n'
             '{}'
             '  $ python app.py\n\n'
-            '  Browse to http://localhost:8000').format(f'  $ cd {app_name}\n' 
-                    if not create_on_curdir else '')
+            '  Browse to http://localhost:8000').format(f'  $ cd {app_name}\n'
+                                                        if not create_on_curdir
+                                                        else '')
 
     print(app_created)
 
+
 def create_ctrl(ctrl_name):
     path = _template_path()
-    
+
     ctrl_dir = os.path.join(os.curdir, 'controllers')
 
     if not os.path.exists(ctrl_dir):
@@ -61,21 +66,24 @@ def create_ctrl(ctrl_name):
 
     if not formatted_ctrl_name:
         print(('error: invalid controller name `{}`. '
-               'Controler names cannot contain `-` or `_`\n').format(ctrl_name))
+               'Controler names cannot contain '
+               '`-` or `_`\n').format(ctrl_name))
         sys.exit()
-        
+
     new_ctrl_path = os.path.join(ctrl_dir, formatted_ctrl_name)
 
-    print(f'\nCreating a new controller: {formatted_ctrl_name}')        
+    print(f'\nCreating a new controller: {formatted_ctrl_name}')
 
     if os.path.exists(new_ctrl_path):
-        print (f'error: a controller named `{formatted_ctrl_name}` already exist',
-               file=sys.stderr)
+        print((f'error: a controller named `{formatted_ctrl_name}`'
+               ' already exist'), file=sys.stderr)
         sys.exit()
-            
+
     shutil.copy(os.path.join(path, 'apiController.py'), new_ctrl_path)
 
-    print(f'Controller `{formatted_ctrl_name}` has been successfully created\n')
+    print((f'Controller `{formatted_ctrl_name}` '
+           'has been successfully created\n'))
+
 
 def _get_ctrl_name(ctrl_name):
     if re.search('(\-|\_)', ctrl_name):
@@ -85,7 +93,8 @@ def _get_ctrl_name(ctrl_name):
     ctrl_name = re.split('controller', ctrl_name, flags=re.IGNORECASE)[0]
 
     return f'{ctrl_name}Controller.py'
-            
+
+
 def _template_path():
     path, _ = os.path.split(__file__)
     return os.path.join(path, '..', 'app_templates')

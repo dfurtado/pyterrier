@@ -6,13 +6,13 @@ from typing import Any
 
 from .base_renderer import BaseRenderer
 
+
 class DjangoRenderer(BaseRenderer):
     """Renderer for django templates"""
 
     def __init__(self,
                  template_dir: str,
-                 extension: Optional str
-                    = 'django.template.backends.django.DjangoTemplates') -> None:
+                 extension: Optional[str] = 'django.template.backends.django.DjangoTemplates') -> None:
         """
         Create a new django template renderer.
         """
@@ -21,6 +21,7 @@ class DjangoRenderer(BaseRenderer):
             'BACKEND': extension,
             'DIRS': [template_dir]
         }])
+
         django.setup()
 
     def render(self, template_name: str, context: Any) -> str:

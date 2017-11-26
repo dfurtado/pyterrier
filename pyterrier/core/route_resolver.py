@@ -1,9 +1,9 @@
 import re
 from typing import Tuple
-from typing import List
 from typing import Dict
 from typing import Any
 from typing import Callable
+
 
 class RouteResolver:
     """
@@ -13,7 +13,7 @@ class RouteResolver:
     def __init__(self, route_table: Dict[str, Tuple[str, Any]]) -> None:
         self._route_table = route_table
 
-    def resolve(self, uri: str, http_verb:str) -> Tuple[str, Callable, Tuple]:
+    def resolve(self, uri: str, http_verb: str) -> Tuple[str, Callable, Tuple]:
         """
         Search the requested URI in the framework's route table.
 

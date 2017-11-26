@@ -3,7 +3,6 @@ import re
 
 from os.path import join
 from os.path import dirname
-from http import HTTPStatus
 
 from typing import Tuple
 from typing import Any

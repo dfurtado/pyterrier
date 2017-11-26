@@ -1,7 +1,5 @@
 import os
-import glob
 import re
-import sys
 
 
 class RouteDiscovery:
