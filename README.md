@@ -29,7 +29,8 @@ $ pip install -e git+https://github.com/dfurtado/pyterrier.git#egg=pyterrier
 3. Alternatively, you can clone the project and install from your local directory
 ```shell
 $ git clone git@github.com:dfurtado/pyterrier.git
-$ cd pyterrier && pipenv shell
+$ cd pyterrier && pipenv --three
+$ pipenv shell
 $ pipenv install --dev
 ```
 
