@@ -53,7 +53,9 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         self.send_response(http_status)
         self.send_header('Content-type', content_type)
         self.end_headers()
-        self.wfile.write(bytes(results, 'utf-8'))
+
+        if results:
+            self.wfile.write(bytes(results, 'utf-8'))
 
     def _decode_results(self, data: Any):
         """ Decode the binary strings to utf-8 """
@@ -72,31 +74,30 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         """ Handler POST requests """
+        request = Request(self)
 
         try:
+            action_info = self._resolver.resolve(self.path, request.method)
+        except KeyError:
+            return self._send_response({}, HTTPStatus.METHOD_NOT_ALLOWED)
 
-            action_info = self._resolver.resolve(self.path, 'POST')
+        ctype, pdict = cgi.parse_header(self.headers.get_content_type())
 
-            ctype, pdict = cgi.parse_header(self.headers.get_content_type())
+        if ctype == 'multipart/form-data':
+            postvars = cgi.parse_multipart(self.rfile, pdict)
+        elif ctype == 'application/x-www-form-urlencoded':
+            length = int(self.headers.get('Content-Length'))
+            postvars = cgi.parse_qs(self.rfile.read(length),
+                                    keep_blank_values=1)
+        else:
+            postvars = {}
 
-            if ctype == 'multipart/form-data':
-                postvars = cgi.parse_multipart(self.rfile, pdict)
-            elif ctype == 'application/x-www-form-urlencoded':
-                length = int(self.headers.get('Content-Length'))
-                postvars = cgi.parse_qs(self.rfile.read(length),
-                                        keep_blank_values=1)
-            else:
-                postvars = {}
-
-            if(action_info is not None):
-                verb, handler, params = action_info
-                decoded_str = self._decode_results(postvars)
-                results = handler(decoded_str)
-                response = self._prepare_json_result(results)
-                self._send_response(*response)
-
-        except KeyError as e:
-            self._send_response({}, HTTPStatus.NOT_FOUND)
+        if action_info:
+            verb, handler, params = action_info
+            decoded_str = self._decode_results(postvars)
+            results = handler(decoded_str) if decoded_str else handler()
+            response = self._prepare_json_result(results)
+            self._send_response(*response)
 
     def do_GET(self) -> None:
         """
@@ -109,7 +110,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         try:
             request = Request(self)
 
-            action_info = self._resolver.resolve(request.path, 'GET')
+            action_info = self._resolver.resolve(request.path, request.method)
 
             if action_info is not None:
                 (verb, handler, params) = action_info
