@@ -8,6 +8,7 @@ from typing import Tuple
 from typing import Any
 from typing import Optional
 from typing import Dict
+from typing import List
 
 from .http.http_handler import HttpRequestHandler
 from .core.route_converter import RouteConverter
@@ -111,7 +112,12 @@ class PyTerrier():
         for route in self._route_discovery.actions:
             self._register_route(*route)
 
-    def _register_route(self, route: str, verb: str, func):
+    def _register_route(
+            self,
+            route: str,
+            default_method: str,
+            func,
+            additional_methods: List[str]=[]):
         """
         Register a new route.
 
@@ -129,12 +135,15 @@ class PyTerrier():
         uri_regex = self.route_converter.convert(route)
         compiled_uri_regex = re.compile(uri_regex)
 
-        try:
-            self._route_table[verb].append((compiled_uri_regex, action))
-        except KeyError:
-            self._route_table[verb] = [(compiled_uri_regex, action)]
+        methods = [default_method] + additional_methods
 
-    def get(self, route: str):
+        for method in methods:
+            if self._route_table.get(method, None):
+                self._route_table[method].append((compiled_uri_regex, action))
+            else:
+                self._route_table[method] = [(compiled_uri_regex, action)]
+
+    def get(self, route: str, additional_methods: List[str]=[]):
         """
         Decorator for GET actions.
 
@@ -155,9 +164,11 @@ class PyTerrier():
             ...
         """
 
-        return lambda func: self._register_route(route, 'GET', func)
+        return lambda func: self._register_route(
+            route, 'GET', func, additional_methods
+        )
 
-    def post(self, route: str):
+    def post(self, route: str, additional_methods: List[str]=[]):
         """
         Decorator for POST actions
 
@@ -178,9 +189,11 @@ class PyTerrier():
             ...
         """
 
-        return lambda func: self._register_route(route, 'POST', func)
+        return lambda func: self._register_route(
+            route, 'POST', func, additional_methods
+        )
 
-    def put(self, route: str):
+    def put(self, route: str, additional_methods: List[str]=[]):
         """
         Decorator for PUT actions.
 
@@ -201,9 +214,11 @@ class PyTerrier():
             ...
         """
 
-        return lambda func: self._register_route(route, 'PUT', func)
+        return lambda func: self._register_route(
+            route, 'PUT', func, additional_methods
+        )
 
-    def patch(self, route: str):
+    def patch(self, route: str, additional_methods: List[str]=[]):
         """
         Decorator for PATCH actions.
 
@@ -224,9 +239,11 @@ class PyTerrier():
             ...
         """
 
-        return lambda func: self._register_route(route, 'PATCH', func)
+        return lambda func: self._register_route(
+            route, 'PATCH', func, additional_methods
+        )
 
-    def delete(self, route: str):
+    def delete(self, route: str, additional_methods: List[str]=[]):
         """
         Decorator for DELETE actions.
 
@@ -247,4 +264,6 @@ class PyTerrier():
             ...
         """
 
-        return lambda func: self._register_route(route, 'DELETE', func)
+        return lambda func: self._register_route(
+            route, 'DELETE', func, additional_methods
+        )
