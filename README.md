@@ -29,7 +29,8 @@ $ pip install -e git+https://github.com/dfurtado/pyterrier.git#egg=pyterrier
 3. Alternatively, you can clone the project and install from your local directory
 ```shell
 $ git clone git@github.com:dfurtado/pyterrier.git
-$ pip install -e [path to pyterrier]
+$ cd pyterrier && pipenv shell
+$ pipenv install --dev
 ```
 
 4. Now you can call the PyTerrier CLI or import PyTerrier outside the frameworks folder.
