@@ -76,11 +76,16 @@ class PyTerrier():
             'staticfiles': self._static_files
         }
 
-        handler = lambda *args: HttpRequestHandler(
-                self._route_table, options, self._renderer, *args)
+        def _handler(*args):
+            return HttpRequestHandler(
+                self._route_table,
+                options,
+                self._renderer,
+                *args
+            )
 
         self._print_config()
-        self._server = ThreadedServer((self._hostname, self._port), handler)
+        self._server = ThreadedServer((self._hostname, self._port), _handler)
         self._server.serve_forever()
 
     def init_routes(self, prefix_routes: Optional[bool]=False) -> None:

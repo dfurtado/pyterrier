@@ -5,6 +5,8 @@ import os
 import re
 import sys
 
+from urllib.parse import urlparse
+
 from typing import Any
 from typing import Tuple
 from typing import Optional
@@ -107,30 +109,29 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         response will be returned.
         """
 
+        request = Request(self)
+
+        if self.is_requesting_file(request.path):
+            self._serve_file(request.path)
+
         try:
-            request = Request(self)
-
             action_info = self._resolver.resolve(request.path, request.method)
-
-            if action_info is not None:
-                (verb, handler, params) = action_info
-                handler.__self__.request = request
-                results = handler(*params)
-
-                response = None
-
-                if isinstance(results, ViewResult):
-                    response = self._prepare_view_result(results)
-                else:
-                    response = self._prepare_json_result(results)
-
-                self._send_response(*response)
-
-            else:
-                self._serve_file(self.path)
-
-        except KeyError as e:
+        except KeyError:
             self._send_response({}, HTTPStatus.NOT_FOUND)
+
+        if action_info:
+            (verb, handler, params) = action_info
+            handler.__self__.request = request
+            results = handler(*params)
+
+            response = None
+
+            if isinstance(results, ViewResult):
+                response = self._prepare_view_result(results)
+            else:
+                response = self._prepare_json_result(results)
+
+            self._send_response(*response)
 
     def _prepare_view_result(self, view_result) -> Tuple[str, HTTPStatus, str]:
         """
@@ -189,6 +190,18 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         return response
 
+    def is_requesting_file(self, path):
+        """
+        Returns True if the it is requesting a file, otherwise, return False.
+
+        path: The relative path to the static file. By default it will
+        search in the static folder in the application root.
+        """
+
+        match = self._static_regex.search(path)
+
+        return match is not None and match.group('ext') is not None
+
     def get_mime_type(self, path: str):
         """
         Returns the mime type base on the extension of the file that the
@@ -200,7 +213,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
         match = self._static_regex.search(path)
 
-        if match is not None and match.group('ext') is not None:
+        if match and match.group('ext'):
             return mimetypes.types_map[match.group('ext')]
 
     def _serve_file(self, path: str):
@@ -211,13 +224,17 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         search in the static folder in the application root.
         """
 
-        path = os.path.normpath(self._config['staticfiles'] + self.path)
+        parsed_req_url = urlparse(path)
+        path = parsed_req_url.path
 
-        mime_type = self.get_mime_type(path)
+        path = os.path.normpath(self._config['staticfiles'] + path)
 
-        if mime_type is None:
+        try:
+            mime_type = self.get_mime_type(path)
+        except KeyError:
             self._send_response('Unsupported media type.',
                                 HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
+            return
 
         if not os.path.exists(path):
             self._send_response('File not found.', HTTPStatus.NOT_FOUND)
