@@ -46,4 +46,4 @@ def test_registration_with_blank_spaces():
 
 @raises(TypeError)
 def test_registration_with_non_str_value():
-    rc = RouteConverter(1)
+    RouteConverter(1)
