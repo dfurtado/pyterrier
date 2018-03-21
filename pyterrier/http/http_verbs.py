@@ -1,7 +1,8 @@
 from typing import Callable
+from typing import List
 
 
-def get(route: str) -> Callable:
+def get(route: str, additional_methods: List[str]=[]) -> Callable:
     """
     States that a function will be executed when a GET request
     is sent to the server.
@@ -34,40 +35,40 @@ def get(route: str) -> Callable:
 
     """
 
-    return lambda func: (route, 'GET', func)
+    return lambda func: (route, 'GET', func, additional_methods)
 
 
-def post(route: str) -> Callable:
+def post(route: str, additional_methods: List[str]=[]) -> Callable:
     """
     States that a function will be executed when a POST request
     is sent to the server.
     """
 
-    return lambda func: (route, 'POST', func)
+    return lambda func: (route, 'POST', func, additional_methods)
 
 
-def put(route: str) -> Callable:
+def put(route: str, additional_methods: List[str]=[]) -> Callable:
     """
     States that a function will be executed when a PUT request
     is sent to the server.
     """
 
-    return lambda func: (route, 'PUT', func)
+    return lambda func: (route, 'PUT', func, additional_methods)
 
 
-def patch(route: str) -> Callable:
+def patch(route: str, additional_methods: List[str]=[]) -> Callable:
     """
     States that a function will be executed when a PATCH request
     is sent to the server.
     """
 
-    return lambda func: (route, 'PATCH', func)
+    return lambda func: (route, 'PATCH', func, additional_methods)
 
 
-def delete(route: str) -> Callable:
+def delete(route: str, additional_methods: List[str]=[]) -> Callable:
     """
     States that a function will be executed when a DELETE request
     is sent to the server.
     """
 
-    return lambda func: (route, 'DELETE', func)
+    return lambda func: (route, 'DELETE', func, additional_methods)
