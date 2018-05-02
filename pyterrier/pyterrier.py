@@ -137,6 +137,9 @@ class PyTerrier():
         func.__setattr__('request', None)
         action = func.__get__(func, type(func))
 
+        if not route.startswith('/'):
+            route = f'/{route}'
+
         uri_regex = self.route_converter.convert(route)
         compiled_uri_regex = re.compile(uri_regex)
 
