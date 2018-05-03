@@ -26,6 +26,12 @@ def test_registration_without_params():
     assert rc.convert(route) == '/api/user/get\/{0,1}$'
 
 
+def test_registration_without_slash_prefix():
+    route = 'api/user/get'
+    rc = RouteConverter()
+    assert rc.convert(route) == '/api/user/get\/{0,1}$'
+
+
 @raises(TypeError)
 def test_registration_with_none_value():
     rc = RouteConverter()

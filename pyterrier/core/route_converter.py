@@ -26,9 +26,11 @@ class RouteConverter():
         """
 
         try:
-
             if is_none_or_empty(route):
                 raise TypeError()
+
+            if not route.startswith('/'):
+                route = f'/{route}'
 
             for key in self._rules:
                 (m, n) = self._rules[key]
