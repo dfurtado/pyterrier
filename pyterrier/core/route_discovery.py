@@ -80,10 +80,16 @@ class RouteDiscovery:
 
         prefixed = []
 
-        for route, verb, func in actions:
+        for route, verb, func, additional_methods in actions:
             module, name = controller.__name__.split('.')
             name = name.replace('Controller', '')
-            prefixed.append((f'/{name}{route}', verb, func))
+
+            if not route.startswith('/'):
+                route = f'/{route}'
+
+            prefixed.append(
+                (f'/{name}{route}', verb, func, additional_methods)
+            )
 
         return prefixed
 
