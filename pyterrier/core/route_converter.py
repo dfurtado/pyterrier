@@ -1,4 +1,5 @@
 import re
+
 from pyterrier.validators.str_validators import is_none_or_empty
 
 
@@ -11,11 +12,11 @@ class RouteConverter():
     def __init__(self):
 
         self._rules = {
-            'integer_params': (re.compile('\{\w+:int\}'), '([0-9]*)'),
-            'str_param': (re.compile('\{\w+:str\}'), '(\w+)'),
+            'integer_params': (re.compile(r'{\w+:int}'), r'([0-9]*)'),
+            'str_param': (re.compile(r'{\w+:str}'), r'(\\w+)'),
         }
 
-        self._trailing_regex = '\/{0,1}$'
+        self._trailing_regex = r'/{0,1}$'
 
     def convert(self, route: str) -> str:
         """
