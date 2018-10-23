@@ -4,11 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+rope = "*"
+"autopep8" = "*"
+yapf = "*"
+"flake8" = "*"
+black = "*"
 pytest = "*"
+ipython = "*"
 
 [packages]
 "jinja2" = "*"
-ipython = "*"
 
 [requires]
 python_version = "3.7"
