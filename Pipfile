@@ -4,13 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-rope = "*"
 "autopep8" = "*"
 yapf = "*"
 "flake8" = "*"
 black = "*"
 pytest = "*"
 ipython = "*"
+rope = ">=0.11.0"
 
 [packages]
 "jinja2" = "*"
