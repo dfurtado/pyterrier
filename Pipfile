@@ -12,6 +12,7 @@ importmagic = "*"
 yapf = "*"
 "flake8" = "*"
 ipython = "*"
+pytest = "*"
 
 [packages]
 "jinja2" = "*"
