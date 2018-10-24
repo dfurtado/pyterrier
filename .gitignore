@@ -11,3 +11,4 @@ env/
 TAGS
 docs
 .mypy_cache
+.pytest_cache
