@@ -86,7 +86,11 @@ class PyTerrier():
 
         self._print_config()
         self._server = ThreadedServer((self._hostname, self._port), _handler)
-        self._server.serve_forever()
+
+        try:
+            self._server.serve_forever()
+        except KeyboardInterrupt:
+            print('\nStopping server. Bye!')
 
     def init_routes(self, prefix_routes: Optional[bool]=False) -> None:
         """

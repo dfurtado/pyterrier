@@ -1,15 +1,17 @@
-from .http_verbs import get
-from .http_verbs import post
-from .http_verbs import put
-from .http_verbs import patch
-from .http_verbs import delete
+from pyterrier.http import (
+    get,
+    post,
+    put,
+    patch,
+    delete,
+)
 
 
 def function_mock():
     return 'test'
 
 
-def decorator_without_addition_http_methods(
+def decorator_test_helper(
         decorator,
         route,
         method=function_mock,
@@ -36,11 +38,11 @@ def decorator_without_addition_http_methods(
 
 
 def test_get_without_addition_methods():
-    decorator_without_addition_http_methods(get, '/api/test/get', 'GET')
+    decorator_test_helper(get, '/api/test/get', 'GET')
 
 
 def test_get_with_additional_methods():
-    decorator_without_addition_http_methods(
+    decorator_test_helper(
         get,
         '/api/test/get',
         'GET',
@@ -49,11 +51,11 @@ def test_get_with_additional_methods():
 
 
 def test_post_without_addition_methods():
-    decorator_without_addition_http_methods(post, '/api/test/post', 'POST')
+    decorator_test_helper(post, '/api/test/post', 'POST')
 
 
 def test_post_with_additional_methods():
-    decorator_without_addition_http_methods(
+    decorator_test_helper(
         post,
         '/api/test/post',
         'POST',
@@ -62,11 +64,11 @@ def test_post_with_additional_methods():
 
 
 def test_put_without_addition_methods():
-    decorator_without_addition_http_methods(put, '/api/test/put', 'PUT')
+    decorator_test_helper(put, '/api/test/put', 'PUT')
 
 
 def test_put_with_additional_methods():
-    decorator_without_addition_http_methods(
+    decorator_test_helper(
         put,
         '/api/test/put',
         'PUT',
@@ -75,11 +77,11 @@ def test_put_with_additional_methods():
 
 
 def test_patch_without_addition_methods():
-    decorator_without_addition_http_methods(patch, '/api/test/patch', 'PATCH')
+    decorator_test_helper(patch, '/api/test/patch', 'PATCH')
 
 
 def test_patch_with_additional_methods():
-    decorator_without_addition_http_methods(
+    decorator_test_helper(
         patch,
         '/api/test/patch',
         'PATCH',
@@ -88,7 +90,7 @@ def test_patch_with_additional_methods():
 
 
 def test_delete_without_addition_methods():
-    decorator_without_addition_http_methods(
+    decorator_test_helper(
         delete,
         '/api/test/delete',
         'DELETE'
@@ -96,7 +98,7 @@ def test_delete_without_addition_methods():
 
 
 def test_delete_with_additional_methods():
-    decorator_without_addition_http_methods(
+    decorator_test_helper(
         delete,
         '/api/test/delete',
         'DELETE',

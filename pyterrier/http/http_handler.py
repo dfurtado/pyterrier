@@ -40,7 +40,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         self._config = config
         self._renderer = renderer
 
-        self._static_regex = re.compile('[/\w\-\.\_]+(?P<ext>\.\w{,4})$',
+        self._static_regex = re.compile(r'[/\w\-\.\_]+(?P<ext>\.\w{,4})$',
                                         re.IGNORECASE | re.DOTALL)
 
         BaseHTTPRequestHandler.__init__(self, *args)
@@ -117,21 +117,24 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         try:
             action_info = self._resolver.resolve(request.path, request.method)
         except KeyError:
-            self._send_response({}, HTTPStatus.NOT_FOUND)
+            return self._send_response({}, HTTPStatus.METHOD_NOT_ALLOWED)
+        else:
+            if not action_info:
+                self._send_response({}, HTTPStatus.NOT_FOUND)
+                return
 
-        if action_info:
-            (verb, handler, params) = action_info
-            handler.__self__.request = request
-            results = handler(*params)
+        (verb, handler, params) = action_info
+        handler.__self__.request = request
+        results = handler(*params)
 
-            response = None
+        response = None
 
-            if isinstance(results, ViewResult):
-                response = self._prepare_view_result(results)
-            else:
-                response = self._prepare_json_result(results)
+        if isinstance(results, ViewResult):
+            response = self._prepare_view_result(results)
+        else:
+            response = self._prepare_json_result(results)
 
-            self._send_response(*response)
+        self._send_response(*response)
 
     def _prepare_view_result(self, view_result) -> Tuple[str, HTTPStatus, str]:
         """

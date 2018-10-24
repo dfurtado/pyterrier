@@ -22,7 +22,7 @@ class DefaultJsonEncoder(json.JSONEncoder):
 
         self._builtin_types = (tuple, set, list, str, int, float, )
 
-        self._regexp = re.compile('(\-|\_)')
+        self._regexp = re.compile(r'(\-|\_)')
 
         self._remove_special_chars = lambda key: self._regexp.sub(' ', key)
         self._to_lower = lambda key: key[0].lower() + key[1:] if key else key
