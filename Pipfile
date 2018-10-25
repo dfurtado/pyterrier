@@ -13,6 +13,7 @@ rope = ">=0.11.0"
 
 [packages]
 "jinja2" = "*"
+click = "*"
 
 [requires]
 python_version = "3.7"
