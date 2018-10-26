@@ -86,7 +86,7 @@ def create_ctrl(ctrl_name):
 
 
 def _get_ctrl_name(ctrl_name):
-    if re.search('(\-|\_)', ctrl_name):
+    if re.search(r'(\-|\_)', ctrl_name):
         return None
 
     ctrl_name = re.sub('.py', '', ctrl_name)
