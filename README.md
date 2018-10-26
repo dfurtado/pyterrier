@@ -57,7 +57,9 @@ The `--newapp` option especify the name of you application, the option `--curren
 application files in our current directory, without this option the CLI will create a directory with the same name of your application
 and create the files in there.
 
-That's it, you done! By default, the application will run on the port 8000. Just browse to http://localhost:8000
+That's it, you done! :metal:
+
+By default, the application will run on the port 8000. Just open up your browser and go to http://localhost:8000 
 
 To get a full description of the options available in the Pyterrier CLI you can use the `--help` option like so `pyterrier --help` and you should see the output below:
 
@@ -86,10 +88,10 @@ app
 | Item| Description |
 |:------|:-------------|
 |:file_folder: app| It's the root of the application, obviously it can be any name you like|
-|app.py| This is the application's entry point, there you can initialize the application and register routes|
-|:file_folder: controllers| The `controllers`folder will be the place to file file containing your actions, a bit more of that later|
-|:file_folder: static| The `static`folder is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
-|:file_folder: templates| This is the folder where Pyterrier will lookup for templates to rendered with the template engine of your choice|
+|:page_facing_up: app.py| This is the application's entry point, there you can initialize the application and register routes|
+|:file_folder: controllers| The `controllers`directory will be the place files containing your actions|
+|:file_folder: static| The `static`directory is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
+|:file_folder: templates| This is the folder where Pyterrier will lookup for templates to render|
 
 
 A very simple PyTerrier application would look a bit like this:
@@ -110,8 +112,7 @@ app.run()
 
 This code will start a server running on the port 3000 and it will define a function that will be executed when a GET request to `/sayhello` is made.
 
-The sayhello function will return a `ViewResult` which will get a template, the context and render it using the
-template engine of your choice. By default, PyTerrier uses Jinja2.
+The `sayhello` function will return a `ViewResult` which will get a template, the context and render it using the template engine of your choice. By default, PyTerrier uses Jinja2.
 
 Let's have a look how the template looks like.
 
@@ -135,7 +136,7 @@ Then we have content html called `index.html`
 {% extends "base.html" %}
 
 {% block content %}
-    Hello, {{message}}!
+    {{message}}
 {% endblock %}
 
 ```
@@ -158,8 +159,7 @@ def sayhello(self, name):
 
 app.run()
 ```
-When a GET request is made to `/sayhello/to/daniel`, the HTML content containg the message
-Hellooooo, daniel! will be returned.
+When a GET request is made to `/sayhello/to/daniel`, the HTML content containg the message `Hellooooo, daniel!` will be returned.
 
 At the moment only `str` and `int` parameter placeholders are supported.
 
@@ -184,10 +184,8 @@ def get(self, id):
 app.run()
 ```
 
-Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention
-PyTerrier looks for actions registered in files inside the `controllers` folder in the application's root.
-With that said, we can create a new folder called `controllers` and inside of that folder we can create a file
-called `userController.py` with the following contents:
+Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention PyTerrier looks for actions registered in files inside the `controllers` folder in the application's root.
+With that said, we can create a new folder called `controllers` and inside of that folder we can create a file called `userController.py` with the following contents:
 
 ``` python
 from pyterrier import PyTerrier
@@ -270,8 +268,18 @@ def delete(self, id):
 
 ## Contributing to the project
 
-See [contributing.md](contributing.md) for more details.
+See [CONTRIBUTING.md](contributing.md) for more details.
 
 ## Copyright and License
 
 Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code released under [BSD 3-clause license](LICENSE)
+
+## Credits
+
+This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage) project template.
+
+
+
+
+
+
