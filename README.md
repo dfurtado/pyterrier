@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/dfurtado/pyterrier.svg?branch=master)](https://travis-ci.org/dfurtado/pyterrier)
+[![pypi](https://img.shields.io/pypi/v/pyterrier.svg)](https://pypi.python.org/pypi/pyterrier)
+
 
 # PyTerrier :dog:
 
@@ -57,8 +59,7 @@ and create the files in there.
 
 That's it, you done! By default, the application will run on the port 8000. Just browse to http://localhost:8000
 
-To get a full description of the options available in the Pyterrier CLI you can use the `--help` option like so `pyterrier --help` and you
-should see the output below:
+To get a full description of the options available in the Pyterrier CLI you can use the `--help` option like so `pyterrier --help` and you should see the output below:
 
 ```text
 Usage: pyterrier [OPTIONS]
@@ -68,14 +69,13 @@ Options:
   --newapp NAME         Name of the new app.
   --newcontroller NAME  Name of the new controller.
   --help                Show this message and exit.
-``
+```
 
 ## Show me some code!!
 
-PyTerrier favorite conventions over configurations, that means the project have to follow a certain structure to
-work, for instance, a minimum bare bone PyTerrier application would have the following structure:
+PyTerrier favorite conventions over configurations, so the project need to follow a certain structure to work, for instance, a minimum bare bone PyTerrier application would have the following structure:
 
-```bash
+```text
 app
 ├── app.py
 ├── controllers
@@ -103,12 +103,14 @@ app = PyTerrier(port=3000)
 @app.get('/sayhello')
 def sayhello(self):
     return ViewResult('index.html', { 'message': 'Hellooooo!' })
+    
+app.run()    
+
 ```
 
-This code will start a server running on the port 3000 and it will define a function that will be executed
-when a GET request to `/sayhello` is made.
+This code will start a server running on the port 3000 and it will define a function that will be executed when a GET request to `/sayhello` is made.
 
-The sayhello function will return a `ViewResult` which will get a template and a context and render it using the
+The sayhello function will return a `ViewResult` which will get a template, the context and render it using the
 template engine of your choice. By default, PyTerrier uses Jinja2.
 
 Let's have a look how the template looks like.
@@ -137,7 +139,7 @@ Then we have content html called `index.html`
 {% endblock %}
 
 ```
-One thing to notice here is that every function in `PyTerrier` have a first argument that is `self`. Self is a reference to the
+One thing to notice here is that every function in `PyTerrier` have a first argument `self`. Self is a reference to the
 function itself and expose a property called `request` which is (as the name says) information about the request that has been
 performed. The `Request` object exposes the request path, the parameters and header values.
 
@@ -153,14 +155,15 @@ app = PyTerrier(port=3000)
 @app.get("/sayhello/to/{name:str}")
 def sayhello(self, name):
     return ViewResult("index.html", { "message": f"Hellooooo, {name}!" })
+
+app.run()
 ```
 When a GET request is made to `/sayhello/to/daniel`, the HTML content containg the message
 Hellooooo, daniel! will be returned.
 
 At the moment only `str` and `int` parameter placeholders are supported.
 
-To return a HTTP/200 response with the results, you can use the
-`Ok` function.
+To return a HTTP/200 response with the results, you can use the `Ok` function.
 
 ``` python
 from pyterrier import PyTerrier
@@ -177,10 +180,12 @@ def get(self, id):
         return NotFound()
 
     return Ok(user)
+
+app.run()
 ```
 
 Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention
-PyTerrier looks for actions registered in files inside the `controllers` folder in the application root.
+PyTerrier looks for actions registered in files inside the `controllers` folder in the application's root.
 With that said, we can create a new folder called `controllers` and inside of that folder we can create a file
 called `userController.py` with the following contents:
 
@@ -207,20 +212,12 @@ from pyterrier import PyTerrier
 
 app = PyTerrier(port=3000)
 
-
-def main():
-    app.init_routes(prefix_routes=True)
-    app.run()
-
-
-if __name__ == "__main__":
-    main()
+app.init_routes(prefix_routes=True)
+app.run()
 ```
 
 The code is very similar with what we had before but now we are calling the method `init_routes`. This method will lookup
-all the files in the `controllers` folder and register all the actions that it founds. Additionally, the argument `prefix_routes`
-is set to `True` meaning that it will prefix the route with the controller prefix. For instance, the route that we just registered
-in the `userController` file is `/get/{id:int}` with the `prefix_routes` set to `True` it will become `/user/get/{id:int}`.
+all the files in the `controllers` directory and register all the actions that it finds. Additionally, the argument `prefix_routes` is set to `True` meaning that it will prefix the route with the controller prefix. For instance, the route that we just registered in the `userController` file is `/get/{id:int}` with the `prefix_routes` set to `True` it will become `/user/get/{id:int}`.
 
 ## Posting data to the server
 
