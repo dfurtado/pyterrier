@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/dfurtado/pyterrier.svg?branch=master)](https://travis-ci.org/dfurtado/pyterrier)
+[![pypi](https://img.shields.io/pypi/v/pyterrier.svg)](https://pypi.python.org/pypi/pyterrier)
+
 
 # PyTerrier :dog:
 
@@ -16,55 +18,66 @@ we can take advantage of all its neat features. PyTerrier is highly inspired by 
 
 ## Quick start
 
-The quickest way to get started is to install PyTerrier on a virtual environment and use the PyTerrier CLI to create a 
+The quickest way to get started is to install PyTerrier on a virtual environment and use the PyTerrier CLI to create a
 new project:
 
-1. Create a virtual environment
+1. Create a new directory for your application
 
-2. Install Pyterrier
 ```shell
-$ pip install -e git+https://github.com/dfurtado/pyterrier.git#egg=pyterrier
+mkdir myapp && cd myapp
 ```
 
-3. Alternatively, you can clone the project and install from your local directory
-```shell
-$ git clone git@github.com:dfurtado/pyterrier.git
-$ cd pyterrier && pipenv --three
-$ pipenv shell
-$ pipenv install --dev
+2. Create a virtual environment (make sure that you have Python 3.6 or greater)
+
+```
+pipenv --three
 ```
 
-4. Now you can call the PyTerrier CLI or import PyTerrier outside the frameworks folder.
-To create your first app, you can run:
+3. Activate the virtual environment
+
 ```shell
-$ python -m pyterrier --newapp firstapp
-$ cd firstapp && python app.py
+pipenv shell
 ```
 
-By default, the application will run on the port 8000. Just browse to http://localhost:8000
+3. Install Pyterrier
 
-To get a full description of the options available in the CLI you can use the `-h` option:
+```shell
+pipenv install pyterrier
+```
+
+### Creating your first application
+
+Now that the PyTerrier is installed you can use the CLI to create our first application, execute the command below:
+
+```shell
+pyterrier --newapp myapp --currentdir
+```
+
+The `--newapp` option especify the name of you application, the option `--currentdir` is used when you want the CLI to create the
+application files in our current directory, without this option the CLI will create a directory with the same name of your application
+and create the files in there.
+
+That's it, you done! :metal:
+
+By default, the application will run on the port 8000. Just open up your browser and go to http://localhost:8000 
+
+To get a full description of the options available in the Pyterrier CLI you can use the `--help` option like so `pyterrier --help` and you should see the output below:
 
 ```text
-usage: pyterrier [-h] [-v] [-c] [--newapp NAME] [--newcontroller NAME]
+Usage: pyterrier [OPTIONS]
 
-PyTerrier CLI
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
-  -c, --currentdir      specify whether or not scaffold the application on the
-                        current directory.
-  --newapp NAME         creates a new PyTerrier application
-  --newcontroller NAME  creates a new controller
+Options:
+  --currentdir          Create the app on the current directory.
+  --newapp NAME         Name of the new app.
+  --newcontroller NAME  Name of the new controller.
+  --help                Show this message and exit.
 ```
 
 ## Show me some code!!
 
-PyTerrier favorite conventions over configurations, that means the project have to follow a certain structure to
-work, for instance, a minimum bare bone PyTerrier application would have the following structure:
+PyTerrier favorite conventions over configurations, so the project need to follow a certain structure to work, for instance, a minimum bare bone PyTerrier application would have the following structure:
 
-```bash
+```text
 app
 ├── app.py
 ├── controllers
@@ -75,10 +88,10 @@ app
 | Item| Description |
 |:------|:-------------|
 |:file_folder: app| It's the root of the application, obviously it can be any name you like|
-|app.py| This is the application's entry point, there you can initialize the application and register routes|
-|:file_folder: controllers| The `controllers`folder will be the place to file file containing your actions, a bit more of that later|
-|:file_folder: static| The `static`folder is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
-|:file_folder: templates| This is the folder where Pyterrier will lookup for templates to rendered with the template engine of your choice|
+|:page_facing_up: app.py| This is the application's entry point, there you can initialize the application and register routes|
+|:file_folder: controllers| The `controllers`directory will be the place files containing your actions|
+|:file_folder: static| The `static`directory is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
+|:file_folder: templates| This is the folder where Pyterrier will lookup for templates to render|
 
 
 A very simple PyTerrier application would look a bit like this:
@@ -92,13 +105,14 @@ app = PyTerrier(port=3000)
 @app.get('/sayhello')
 def sayhello(self):
     return ViewResult('index.html', { 'message': 'Hellooooo!' })
+    
+app.run()    
+
 ```
 
-This code will start a server running on the port 3000 and it will define a function that will be executed
-when a GET request to `/sayhello` is made.
+This code will start a server running on the port 3000 and it will define a function that will be executed when a GET request to `/sayhello` is made.
 
-The sayhello function will return a `ViewResult` which will get a template and a context and render it using the
-template engine of your choice. By default, PyTerrier uses Jinja2.
+The `sayhello` function will return a `ViewResult` which will get a template, the context and render it using the template engine of your choice. By default, PyTerrier uses Jinja2.
 
 Let's have a look how the template looks like.
 
@@ -122,11 +136,11 @@ Then we have content html called `index.html`
 {% extends "base.html" %}
 
 {% block content %}
-    Hello, {{message}}!
+    {{message}}
 {% endblock %}
 
 ```
-One thing to notice here is that every function in `PyTerrier` have a first argument that is `self`. Self is a reference to the
+One thing to notice here is that every function in `PyTerrier` have a first argument `self`. Self is a reference to the
 function itself and expose a property called `request` which is (as the name says) information about the request that has been
 performed. The `Request` object exposes the request path, the parameters and header values.
 
@@ -142,14 +156,14 @@ app = PyTerrier(port=3000)
 @app.get("/sayhello/to/{name:str}")
 def sayhello(self, name):
     return ViewResult("index.html", { "message": f"Hellooooo, {name}!" })
+
+app.run()
 ```
-When a GET request is made to `/sayhello/to/daniel`, the HTML content containg the message
-Hellooooo, daniel! will be returned.
+When a GET request is made to `/sayhello/to/daniel`, the HTML content containg the message `Hellooooo, daniel!` will be returned.
 
 At the moment only `str` and `int` parameter placeholders are supported.
 
-To return a HTTP/200 response with the results, you can use the
-`Ok` function.
+To return a HTTP/200 response with the results, you can use the `Ok` function.
 
 ``` python
 from pyterrier import PyTerrier
@@ -166,17 +180,19 @@ def get(self, id):
         return NotFound()
 
     return Ok(user)
+
+app.run()
 ```
 
-Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention
-PyTerrier looks for actions registered in files inside the `controllers` folder in the application root.
-With that said, we can create a new folder called `controllers` and inside of that folder we can create a file
-called `userController.py` with the following contents:
+Now, there are situations that it's not viable to keep all the api endpoints in a single file. By convention PyTerrier looks for actions registered in files inside the `controllers` folder in the application's root.
+With that said, we can create a new folder called `controllers` and inside of that folder we can create a file called `userController.py` with the following contents:
 
 ``` python
 from pyterrier import PyTerrier
 from pyterrier.http import Ok, NotFound, get
 
+
+app = PyTerrier(port=3000)
 
 @get("/get/{id:int}")
 def get(self, id):
@@ -186,6 +202,8 @@ def get(self, id):
         return NotFound()
 
     return Ok(user)
+
+app.run()
 ```
 
 We also need to perform some changes in the application's main file, like so:
@@ -196,20 +214,12 @@ from pyterrier import PyTerrier
 
 app = PyTerrier(port=3000)
 
-
-def main():
-    app.init_routes(prefix_routes=True)
-    app.run()
-
-
-if __name__ == "__main__":
-    main()
+app.init_routes(prefix_routes=True)
+app.run()
 ```
 
 The code is very similar with what we had before but now we are calling the method `init_routes`. This method will lookup
-all the files in the `controllers` folder and register all the actions that it founds. Additionally, the argument `prefix_routes`
-is set to `True` meaning that it will prefix the route with the controller prefix. For instance, the route that we just registered
-in the `userController` file is `/get/{id:int}` with the `prefix_routes` set to `True` it will become `/user/get/{id:int}`.
+all the files in the `controllers` directory and register all the actions that it finds. Additionally, the argument `prefix_routes` is set to `True` meaning that it will prefix the route with the controller prefix. For instance, the route that we just registered in the `userController` file is `/get/{id:int}` with the `prefix_routes` set to `True` it will become `/user/get/{id:int}`.
 
 ## Posting data to the server
 
@@ -262,8 +272,18 @@ def delete(self, id):
 
 ## Contributing to the project
 
-See [contributing.md](contributing.md) for more details.
+See [CONTRIBUTING.md](contributing.md) for more details.
 
 ## Copyright and License
 
 Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code released under [BSD 3-clause license](LICENSE)
+
+## Credits
+
+This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage) project template.
+
+
+
+
+
+

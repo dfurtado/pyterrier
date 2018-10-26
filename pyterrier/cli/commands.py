@@ -6,10 +6,6 @@ import re
 
 def create_app(app_name, create_on_curdir=False):
 
-    if create_on_curdir and len(os.listdir(os.curdir)) > 0:
-        print('error: the current folder is not empty')
-        sys.exit()
-
     path = _template_path()
 
     print(f'\nCreating a new application: {app_name}')
