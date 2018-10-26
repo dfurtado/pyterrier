@@ -4,7 +4,6 @@ import click
 from pyterrier.cli.commands import create_app, create_ctrl
 
 
-@click.command()
 @click.option('--currentdir', is_flag=True,
               help='Create the app on the current directory.')
 @click.option('--newapp', metavar='<app name>',
