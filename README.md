@@ -16,48 +16,59 @@ we can take advantage of all its neat features. PyTerrier is highly inspired by 
 
 ## Quick start
 
-The quickest way to get started is to install PyTerrier on a virtual environment and use the PyTerrier CLI to create a 
+The quickest way to get started is to install PyTerrier on a virtual environment and use the PyTerrier CLI to create a
 new project:
 
-1. Create a virtual environment
+1. Create a new directory for your application
 
-2. Install Pyterrier
 ```shell
-$ pip install -e git+https://github.com/dfurtado/pyterrier.git#egg=pyterrier
+mkdir myapp && cd myapp
 ```
 
-3. Alternatively, you can clone the project and install from your local directory
-```shell
-$ git clone git@github.com:dfurtado/pyterrier.git
-$ cd pyterrier && pipenv --three
-$ pipenv shell
-$ pipenv install --dev
+2. Create a virtual environment (make sure that you have Python 3.6 or greater)
+
+```
+pipenv --three
 ```
 
-4. Now you can call the PyTerrier CLI or import PyTerrier outside the frameworks folder.
-To create your first app, you can run:
+3. Activate the virtual environment
+
 ```shell
-$ python -m pyterrier --newapp firstapp
-$ cd firstapp && python app.py
+pipenv shell
 ```
 
-By default, the application will run on the port 8000. Just browse to http://localhost:8000
+3. Install Pyterrier
 
-To get a full description of the options available in the CLI you can use the `-h` option:
+```shell
+pipenv install pyterrier
+```
+
+### Creating your first application
+
+Now that the PyTerrier is installed you can use the CLI to create our first application, execute the command below:
+
+```shell
+pyterrier --newapp myapp --currentdir
+```
+
+The `--newapp` option especify the name of you application, the option `--currentdir` is used when you want the CLI to create the
+application files in our current directory, without this option the CLI will create a directory with the same name of your application
+and create the files in there.
+
+That's it, you done! By default, the application will run on the port 8000. Just browse to http://localhost:8000
+
+To get a full description of the options available in the Pyterrier CLI you can use the `--help` option like so `pyterrier --help` and you
+should see the output below:
 
 ```text
-usage: pyterrier [-h] [-v] [-c] [--newapp NAME] [--newcontroller NAME]
+Usage: pyterrier [OPTIONS]
 
-PyTerrier CLI
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
-  -c, --currentdir      specify whether or not scaffold the application on the
-                        current directory.
-  --newapp NAME         creates a new PyTerrier application
-  --newcontroller NAME  creates a new controller
-```
+Options:
+  --currentdir          Create the app on the current directory.
+  --newapp NAME         Name of the new app.
+  --newcontroller NAME  Name of the new controller.
+  --help                Show this message and exit.
+``
 
 ## Show me some code!!
 
