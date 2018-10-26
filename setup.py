@@ -25,9 +25,13 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.7',
-    ],
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Unix',
+        'Operating System :: POSIX',
+        ],
     description="The web framework that favorite conventions over configurations",
     entry_points={
         'console_scripts': [
@@ -54,6 +58,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/dfurtado/pyterrier',
-    version='0.1.0',
+    version='0.1.3',
     zip_safe=False,
 )

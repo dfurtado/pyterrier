@@ -2,7 +2,7 @@
 [![pypi](https://img.shields.io/pypi/v/pyterrier.svg)](https://pypi.python.org/pypi/pyterrier)
 
 
-# PyTerrier :dog:
+# PyTerrier
 
 This project has started out of my curiosity to understand how web frameworks work under the hood, to study
 closely the http module and also the feel that the Python community need to have frameworks written in Python 3, so
@@ -10,7 +10,7 @@ we can take advantage of all its neat features. PyTerrier is highly inspired by 
 
 ## Highlight features
 
-- Written in Python 3.6
+- Written in Python 3.7 
 - Favorite conventions over configuration
 - Value simple code
 - Flexible
@@ -87,11 +87,11 @@ app
 
 | Item| Description |
 |:------|:-------------|
-|:file_folder: app| It's the root of the application, obviously it can be any name you like|
-|:page_facing_up: app.py| This is the application's entry point, there you can initialize the application and register routes|
-|:file_folder: controllers| The `controllers`directory will be the place files containing your actions|
-|:file_folder: static| The `static`directory is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
-|:file_folder: templates| This is the folder where Pyterrier will lookup for templates to render|
+|app| It's the root of the application, obviously it can be any name you like|
+|app.py| This is the application's entry point, there you can initialize the application and register routes|
+|controllers| The `controllers`directory will be the place files containing your actions|
+|static| The `static`directory is where you can place all the static assets of your application. CSS, JavaScript, Images, Fonts...|
+|templates| This is the folder where Pyterrier will lookup for templates to render|
 
 
 A very simple PyTerrier application would look a bit like this:
