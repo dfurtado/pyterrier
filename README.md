@@ -192,6 +192,8 @@ from pyterrier import PyTerrier
 from pyterrier.http import Ok, NotFound, get
 
 
+app = PyTerrier(port=3000)
+
 @get("/get/{id:int}")
 def get(self, id):
     user = user_repository.get(id)
@@ -200,6 +202,8 @@ def get(self, id):
         return NotFound()
 
     return Ok(user)
+
+app.run()
 ```
 
 We also need to perform some changes in the application's main file, like so:
