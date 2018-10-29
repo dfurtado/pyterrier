@@ -31,8 +31,9 @@ setup(
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Unix',
         'Operating System :: POSIX',
+        'Environment :: Web Environment',
         ],
-    description="The web framework that favorite conventions over configurations",
+    description="The simplest web framework you will ever use",
     entry_points={
         'console_scripts': [
             'pyterrier=pyterrier.pyterrier_cli:main',
@@ -43,7 +44,7 @@ setup(
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/markdown',
     include_package_data=True,
-    keywords='pyterrier',
+    keywords='pyterrier web webdevelopment rest webframework',
     name='pyterrier',
     packages=find_packages(include=[
         'pyterrier',
@@ -58,6 +59,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/dfurtado/pyterrier',
-    version='0.1.3',
+    version='0.1.4',
     zip_safe=False,
 )
