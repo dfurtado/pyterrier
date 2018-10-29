@@ -1,5 +1,9 @@
 # History
 
+### 0.1.4 (2018-10-29)
+
+* Documentation fixes.
+
 ### 0.1.3 (2018-10-26)
 
 * Documentation fixes.

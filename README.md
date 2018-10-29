@@ -10,7 +10,7 @@ we can take advantage of all its neat features. PyTerrier is highly inspired by 
 
 ## Highlight features
 
-- Written in Python 3.7 
+- Written in Python 3.7
 - Favorite conventions over configuration
 - Value simple code
 - Flexible
@@ -57,9 +57,9 @@ The `--newapp` option especify the name of you application, the option `--curren
 application files in our current directory, without this option the CLI will create a directory with the same name of your application
 and create the files in there.
 
-That's it, you done! :metal:
+That's it, you done!
 
-By default, the application will run on the port 8000. Just open up your browser and go to http://localhost:8000 
+By default, the application will run on the port 8000. Just open up your browser and go to http://localhost:8000
 
 To get a full description of the options available in the Pyterrier CLI you can use the `--help` option like so `pyterrier --help` and you should see the output below:
 
@@ -105,8 +105,8 @@ app = PyTerrier(port=3000)
 @app.get('/sayhello')
 def sayhello(self):
     return ViewResult('index.html', { 'message': 'Hellooooo!' })
-    
-app.run()    
+
+app.run()
 
 ```
 
@@ -281,9 +281,3 @@ Copyright (c) 2017 [Daniel Furtado](https://twitter.com/the8bitcoder). Code rele
 ## Credits
 
 This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage) project template.
-
-
-
-
-
-
